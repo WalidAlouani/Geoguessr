@@ -2,7 +2,7 @@ using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
 
-public class LevelSerializerJson : IDataSerializer<QuizData>
+public class QuizSerializerJson : IDataSerializer<QuizData>
 {
     public string FileExtension => "json";
 

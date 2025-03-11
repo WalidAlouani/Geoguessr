@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class CameraBoundaries : MonoBehaviour
 {
-    [SerializeField] private Vector2 BoundsX = new Vector2(-10f, 10);  // Lower bound
-    [SerializeField] private Vector2 BoundsZ = new Vector3(-10f, 10);    // Upper bound
+    [SerializeField] private Vector2 BoundsX = new Vector2(-10f, 10);
+    [SerializeField] private Vector2 BoundsZ = new Vector3(-10f, 10);
     public Vector3 ClampToBounds(Vector3 worldPos)
     {
-        // Convert this offset into the camera's local space.
+        // Convert this offset into the object's local space.
         Vector3 localOffset = transform.InverseTransformVector(worldPos);
 
         // Clamp the x and y components.
