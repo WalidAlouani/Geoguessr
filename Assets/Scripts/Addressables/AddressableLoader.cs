@@ -3,10 +3,11 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
-public static class AddressableLoader
+public class AddressableLoader: IAssetLoader
 {
-    private static readonly Dictionary<string, AsyncOperationHandle> loadedAssetHandles = new Dictionary<string, AsyncOperationHandle>();
+    private readonly Dictionary<string, AsyncOperationHandle> loadedAssetHandles = new Dictionary<string, AsyncOperationHandle>();
 
     /// <summary>
     /// Loads an asset from the Addressables system asynchronously by its address (name or ID).
@@ -15,7 +16,7 @@ public static class AddressableLoader
     /// <typeparam name="T">The type of asset to load (e.g., Texture2D, Sprite, GameObject).</typeparam>
     /// <param name="assetId">The address (name or ID) of the asset in Addressables.</param>
     /// <returns>The loaded asset of type T, or null if loading fails. The operation is wrapped in a Task for async handling.</returns>
-    public static async Task<T> LoadAssetAsync<T>(string assetId) where T : Object
+    public async Task<T> LoadAssetAsync<T>(string assetId) where T : Object
     {
         if (loadedAssetHandles.TryGetValue(assetId, out AsyncOperationHandle existingHandle))
         {
@@ -53,7 +54,7 @@ public static class AddressableLoader
     /// It retrieves the handle from the internal cache using the asset name.
     /// </summary>
     /// <param name="assetId">The address (name or ID) of the asset to release.</param>
-    public static void ReleaseAsset(string assetId)
+    public void ReleaseAsset(string assetId)
     {
         if (loadedAssetHandles.TryGetValue(assetId, out AsyncOperationHandle handle))
         {
@@ -74,13 +75,13 @@ public static class AddressableLoader
         }
     }
 
-    /// <summary>
-    /// Checks if an asset with the given name/ID is currently loaded and cached by this loader.
-    /// </summary>
-    /// <param name="assetNameOrId">The address (name or ID) of the asset to check.</param>
-    /// <returns>True if the asset is loaded and cached, false otherwise.</returns>
-    public static bool IsAssetLoaded(string assetNameOrId)
+    public void ReleaseAll()
     {
-        return loadedAssetHandles.ContainsKey(assetNameOrId) && loadedAssetHandles[assetNameOrId].IsValid() && loadedAssetHandles[assetNameOrId].Status == AsyncOperationStatus.Succeeded;
+        foreach (var item in loadedAssetHandles.Keys.ToList())
+        {
+            ReleaseAsset(item);
+        }
+
+        loadedAssetHandles.Clear();
     }
 }

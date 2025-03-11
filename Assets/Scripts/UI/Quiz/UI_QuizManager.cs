@@ -1,55 +1,49 @@
-using TMPro;
+using System;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UI_QuizManager : MonoBehaviour
 {
-    [SerializeField] private TMP_Text question;
-    [SerializeField] private Image image;
-    [SerializeField] private UI_ButtonAnswer[] answers;
-
+    [SerializeField] private UI_QuizQuestionScreen question; //Maybe IQuizScreen
+    [SerializeField] private UI_QuizResultScreen result;
     private QuizData quizData;
 
     private void OnEnable()
     {
-        for (int i = 0; i < answers.Length; i++)
-            answers[i].OnClicked += OnAnswerClicked;
+        question.OnAnswered += OnQuizAnswered;
     }
 
     private void OnDisable()
     {
-        for (int i = 0; i < answers.Length; i++)
-            answers[i].OnClicked -= OnAnswerClicked;
+        question.OnAnswered -= OnQuizAnswered;
     }
 
-    public async void DisplayQuiz(QuizData quizData)
+    public void Initialize(QuizData quizData, IAssetLoader assetLoader)
     {
         this.quizData = quizData;
+        result.gameObject.SetActive(false);
+        question.gameObject.SetActive(true);
+        question.DisplayQuiz(quizData, assetLoader);
 
-        question.text = quizData.Question;
-        for (int i = 0; i < quizData.Answers.Count; i++)
-        {
-            var answer = quizData.Answers[i];
-            answers[i].Initialize(answer, i);
-        }
-
-        image.sprite = await AddressableLoader.LoadAssetAsync<Sprite>(quizData.CustomImageID);
+        StartCoroutine(StartQuiz());
     }
 
-    private void OnAnswerClicked(int index)
+    public IEnumerator StartQuiz()
     {
-        var correctAnswer = index == quizData.CorrectAnswerIndex;
-        answers[index].SetResponse(correctAnswer);
-
-        for (int i = 0; i < quizData.Answers.Count; i++)
-        {
-            var answer = quizData.Answers[i];
-            answers[i].DisableClick();
-        }
+        yield return new WaitForSeconds(1.0f);
+        question.StartQuiz();
     }
 
-    private void OnDestroy()
+    private void OnQuizAnswered(bool correctAnswer)
     {
-        AddressableLoader.ReleaseAsset(quizData.CustomImageID);
+        StartCoroutine(ShowResultScreen(correctAnswer));
+    }
+
+    private IEnumerator ShowResultScreen(bool correctAnswer)
+    {
+        yield return new WaitForSeconds(1.5f);
+        result.gameObject.SetActive(true);
+        question.gameObject.SetActive(false);
+        result.SetResult(quizData, correctAnswer);
     }
 }

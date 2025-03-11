@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using TMPro;
 using UnityEngine;
@@ -25,6 +26,9 @@ public class UI_ButtonAnswer : MonoBehaviour
         this.index = index;
         if (answer.Text != string.Empty)
             text.text = answer.Text;
+
+        transform.localScale = Vector3.one * 0.2f;
+        transform.DOScale(1, 0.5f).SetEase(Ease.InBack); // change with animation clip
     }
 
     public void SetResponse(bool isCorrect)
@@ -32,8 +36,8 @@ public class UI_ButtonAnswer : MonoBehaviour
         buttonImage.sprite = isCorrect ? correct : wrong;
     }
 
-    public void DisableClick()
+    public void EnableClick(bool enable)
     {
-        button.interactable = false;
+        button.interactable = enable;
     }
 }
