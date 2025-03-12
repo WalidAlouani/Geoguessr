@@ -7,23 +7,28 @@ using UnityEngine.UI;
 public class UI_QuizResultScreen : MonoBehaviour
 {
     [SerializeField] private TMP_Text correctAnswerText;
-    [SerializeField] private Image correctAnswerImage;
     [SerializeField] private TMP_Text tapToContinueText;
     [SerializeField] private GameObject tapToContinue;
     [SerializeField] private GameObject correct;
     [SerializeField] private GameObject wrong;
+    [SerializeField] private GameObject timeIsUp;
 
-    public void SetResult(TextQuiz quizData, bool isCorrectAnswer)
+    public void SetResult(TextQuiz quizData, QuizResult quizResult)
     {
-        if (isCorrectAnswer)
-            correct.SetActive(true);
-        else
-            wrong.SetActive(true);
+        switch (quizResult)
+        {
+            case QuizResult.Correct:
+                correct.SetActive(true);
+                break;
+            case QuizResult.Wrong:
+                wrong.SetActive(true);
+                break;
+            case QuizResult.TimeIsUp:
+                timeIsUp.SetActive(true);
+                break;
+        }
 
-        var answer = quizData.Answers[quizData.CorrectAnswerIndex];
-
-        this.correctAnswerText.text = answer;
-        //this.correctAnswerImage.sprite = answer.Text.ToString();
+        correctAnswerText.text = quizData.Answers[quizData.CorrectAnswerIndex];
 
         StartCoroutine(ShowTapToContinue());
     }

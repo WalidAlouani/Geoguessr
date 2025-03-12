@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class QuizManager : MonoBehaviour
 {
-    public CountryCodes CountryCodes;
     public TextAsset quizFile;
     public UI_QuizManager uI_QuizManager;
     public event Action QuizFinished;
@@ -19,9 +18,9 @@ public class QuizManager : MonoBehaviour
 
         var quizData = JsonConvert.DeserializeObject<QuizData>(quizFile.text);
 
-        var quiz = await QuizFactory.CreateQuizAsync(quizData, assetLoader, CountryCodes);
+        var quiz = await TextQuiz.CreateAsync(quizData, assetLoader);
 
-        uI_QuizManager.Initialize((TextQuiz)quiz);
+        uI_QuizManager.Initialize(quiz);
     }
 
     public void OnQuizFinished()
@@ -38,24 +37,35 @@ public class QuizManager : MonoBehaviour
 
 public class QuizFactory
 {
-    public static async Task<QuizDataBase> CreateQuizAsync(QuizData quizData, IAssetLoader assetLoader, ICountryCodeLookup countryCodeLookup)
+    public static async Task<QuizDataBase<TAnswer>> CreateQuizAsync<TAnswer>(QuizData quizData, IAssetLoader assetLoader, ICountryCodeLookup countryCodeLookup)
     {
         switch (quizData.QuestionType)
         {
             case QuestionType.Text:
-                return await TextQuiz.CreateAsync(quizData, assetLoader);
+                if (typeof(TAnswer) != typeof(string))
+                    throw new ArgumentException("For a text quiz, the generic type TAnswer must be string.");
+                // Create the text quiz and cast it to QuizDataBase<TAnswer>
+                var textQuiz = await TextQuiz.CreateAsync(quizData, assetLoader);
+                return textQuiz as QuizDataBase<TAnswer>;
+
             case QuestionType.Flag:
-                return await FlagQuiz.CreateAsync(quizData, assetLoader, countryCodeLookup);
+                if (typeof(TAnswer) != typeof(Sprite))
+                    throw new ArgumentException("For a flag quiz, the generic type TAnswer must be Sprite.");
+                var flagQuiz = await FlagQuiz.CreateAsync(quizData, assetLoader, countryCodeLookup);
+                return flagQuiz as QuizDataBase<TAnswer>;
+
             default:
                 throw new NotSupportedException($"Quiz type {quizData.QuestionType} is not supported.");
         }
     }
 }
 
-public abstract class QuizDataBase
+
+public abstract class QuizDataBase<TAnswer>
 {
     public string Question;
     public int CorrectAnswerIndex;
+    public TAnswer[] Answers;
 
     protected QuizDataBase(QuizData quizData)
     {
@@ -64,9 +74,8 @@ public abstract class QuizDataBase
     }
 }
 
-public class TextQuiz : QuizDataBase
+public class TextQuiz : QuizDataBase<string>
 {
-    public string[] Answers;
     public Sprite ReferenceImage;
 
     public static async Task<TextQuiz> CreateAsync(QuizData quizData, IAssetLoader assetLoader)
@@ -92,9 +101,8 @@ public class TextQuiz : QuizDataBase
     }
 }
 
-public class FlagQuiz : QuizDataBase
+public class FlagQuiz : QuizDataBase<Sprite>
 {
-    public Sprite[] Answers;
     public string CorrectCountryName;
 
     public static async Task<FlagQuiz> CreateAsync(QuizData quizData, IAssetLoader assetLoader, ICountryCodeLookup countryCodeLookup)

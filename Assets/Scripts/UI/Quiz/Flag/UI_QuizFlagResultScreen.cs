@@ -12,13 +12,22 @@ public class UI_QuizFlagResultScreen : MonoBehaviour
     [SerializeField] private GameObject tapToContinue;
     [SerializeField] private GameObject correct;
     [SerializeField] private GameObject wrong;
+    [SerializeField] private GameObject timeIsUp;
 
-    public void SetResult(FlagQuiz quizData, bool isCorrectAnswer)
+    public void SetResult(FlagQuiz quizData, QuizResult quizResult)
     {
-        if (isCorrectAnswer)
-            correct.SetActive(true);
-        else
-            wrong.SetActive(true);
+        switch (quizResult)
+        {
+            case QuizResult.Correct:
+                correct.SetActive(true);
+                break;
+            case QuizResult.Wrong:
+                wrong.SetActive(true);
+                break;
+            case QuizResult.TimeIsUp:
+                timeIsUp.SetActive(true);
+                break;
+        }
 
         correctAnswerImage.sprite = quizData.Answers[quizData.CorrectAnswerIndex];
         correctAnswerText.text = quizData.CorrectCountryName;

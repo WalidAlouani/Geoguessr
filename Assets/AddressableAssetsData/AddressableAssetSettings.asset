@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: ec2b4a7a856119d43acaaa1c225a892c
   m_currentHash:
     serializedVersion: 2
-    Hash: 58d0ef302b6db1dde914282a3af47b44
+    Hash: 00000000000000000000000000000000
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -90,6 +90,8 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
+    - FlagQuiz
+    - TextQuiz
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: d60beb7ecddda23498e0659f6e990ac7, type: 2}

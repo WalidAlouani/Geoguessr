@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum QuizResult { Correct, Wrong, TimeIsUp }
+
 public class UI_QuizQuestionScreen : MonoBehaviour
 {
     [SerializeField] private TMP_Text question;
@@ -15,7 +17,7 @@ public class UI_QuizQuestionScreen : MonoBehaviour
     private TextQuiz quizData;
     private SimpleTimer timer;
 
-    public event Action<bool> OnAnswered;
+    public event Action<QuizResult> OnAnswered;
 
     private void Awake()
     {
@@ -52,12 +54,12 @@ public class UI_QuizQuestionScreen : MonoBehaviour
 
     public void OnAnswerClicked(int index)
     {
-        var correctAnswer = index == quizData.CorrectAnswerIndex;
-        answers[index].SetResponse(correctAnswer);
-
         EnableAnswers(false);
         timer.StopTimer();
-        OnAnswered?.Invoke(correctAnswer);
+
+        var correctAnswer = index == quizData.CorrectAnswerIndex;
+        answers[index].SetResponse(correctAnswer);
+        OnAnswered?.Invoke(correctAnswer ? QuizResult.Correct : QuizResult.Wrong);
     }
 
     private IEnumerator StartQuiz()
@@ -76,7 +78,7 @@ public class UI_QuizQuestionScreen : MonoBehaviour
     private void OnTimerFinished()
     {
         EnableAnswers(false);
-        OnAnswered?.Invoke(false);
+        OnAnswered?.Invoke(QuizResult.TimeIsUp);
     }
 
     private void EnableAnswers(bool enable)

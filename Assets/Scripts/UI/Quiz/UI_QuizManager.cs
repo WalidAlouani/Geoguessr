@@ -26,16 +26,16 @@ public class UI_QuizManager : MonoBehaviour
         question.DisplayQuiz(quizData);
     }
 
-    private void OnQuizAnswered(bool correctAnswer)
+    private void OnQuizAnswered(QuizResult quizResult)
     {
-        StartCoroutine(ShowResultScreen(correctAnswer));
+        StartCoroutine(ShowResultScreen(quizResult));
     }
 
-    private IEnumerator ShowResultScreen(bool correctAnswer)
+    private IEnumerator ShowResultScreen(QuizResult quizResult)
     {
         yield return new WaitForSeconds(1.5f);
         result.gameObject.SetActive(true);
         question.gameObject.SetActive(false);
-        result.SetResult(quizData, correctAnswer);
+        result.SetResult(quizData, quizResult);
     }
 }

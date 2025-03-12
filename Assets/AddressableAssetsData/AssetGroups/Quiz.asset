@@ -20,12 +20,20 @@ MonoBehaviour:
   - m_GUID: 66588a69ef43e4ed288f156ecfd7e532
     m_Address: 085e0503-f3b3-49d8-8d2d-6f833ce403d3
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - FlagQuiz
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 952f70ada48f2445494217015362263b
     m_Address: 80cb8d34-2793-44b6-a797-217ce3c9587d
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - TextQuiz
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe8acd215e1500b478c40b51b6393fc4
+    m_Address: e3f5a1b2-7c48-4d91-9e6a-2b8d3f16c8e4
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - FlagQuiz
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d0e9cf9704c11294991c108c1f2c5378, type: 2}

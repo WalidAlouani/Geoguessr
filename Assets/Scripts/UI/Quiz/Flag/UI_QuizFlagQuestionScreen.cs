@@ -14,7 +14,7 @@ public class UI_QuizFlagQuestionScreen : MonoBehaviour
     private FlagQuiz quizData;
     private SimpleTimer timer;
 
-    public event Action<bool> OnAnswered;
+    public event Action<QuizResult> OnAnswered;
 
     private void Awake()
     {
@@ -56,7 +56,7 @@ public class UI_QuizFlagQuestionScreen : MonoBehaviour
 
         EnableAnswers(false);
         timer.StopTimer();
-        OnAnswered?.Invoke(correctAnswer);
+        OnAnswered?.Invoke(correctAnswer ? QuizResult.Correct : QuizResult.Wrong);
     }
 
     private IEnumerator StartQuiz()
@@ -75,7 +75,7 @@ public class UI_QuizFlagQuestionScreen : MonoBehaviour
     private void OnTimerFinished()
     {
         EnableAnswers(false);
-        OnAnswered?.Invoke(false);
+        OnAnswered?.Invoke(QuizResult.TimeIsUp);
     }
 
     private void EnableAnswers(bool enable)
