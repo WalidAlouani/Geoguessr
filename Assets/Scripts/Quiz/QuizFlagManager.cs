@@ -2,10 +2,10 @@ using Newtonsoft.Json;
 using System;
 using UnityEngine;
 
-public class QuizManager : MonoBehaviour
+public class QuizFlagManager : MonoBehaviour
 {
     public TextAsset quizFile;
-    public UI_QuizManager uI_QuizManager;
+    public UI_QuizManagerFlag uI_QuizManager;
     public event Action QuizFinished;
 
     private IAssetLoader assetLoader;

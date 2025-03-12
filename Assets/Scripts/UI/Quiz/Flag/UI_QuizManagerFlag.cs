@@ -1,9 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
-public class UI_QuizManager : MonoBehaviour
+public class UI_QuizManagerFlag : MonoBehaviour
 {
-    [SerializeField] private UI_QuizQuestionScreen question; //Maybe IQuizScreen
+    [SerializeField] private UI_QuizFlagQuestionScreen question; //Maybe IQuizScreen
     [SerializeField] private UI_QuizResultScreen result;
 
     private QuizData quizData;

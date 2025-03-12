@@ -4,17 +4,15 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_QuizQuestionScreen : MonoBehaviour
+public class UI_QuizFlagQuestionScreen : MonoBehaviour
 {
     [SerializeField] private TMP_Text question;
-    [SerializeField] private Image image;
-    [SerializeField] private UI_ButtonAnswer[] answers;
+    [SerializeField] private UI_ButtonAnswerFlag[] answers;
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private int time = 15;
 
     private QuizData quizData;
     private SimpleTimer timer;
-    private IAssetLoader assetLoader;
 
     public event Action<bool> OnAnswered;
 
@@ -38,16 +36,14 @@ public class UI_QuizQuestionScreen : MonoBehaviour
     public async void DisplayQuiz(QuizData quizData, IAssetLoader assetLoader)
     {
         this.quizData = quizData;
-        this.assetLoader = assetLoader;
 
         question.text = quizData.Question;
         for (int i = 0; i < quizData.Answers.Count; i++)
         {
             var answer = quizData.Answers[i];
-            answers[i].Initialize(answer.Text);
+            var sprite = await assetLoader.LoadAssetAsync<Sprite>(answer.ImageID);
+            answers[i].Initialize(sprite);
         }
-
-        image.sprite = await assetLoader.LoadAssetAsync<Sprite>(quizData.CustomImageID);
 
         StartCoroutine(StartQuiz());
     }
@@ -93,10 +89,5 @@ public class UI_QuizQuestionScreen : MonoBehaviour
     private void Update()
     {
         timer?.Tick(Time.deltaTime);
-    }
-
-    private void OnDestroy()
-    {
-        assetLoader.ReleaseAsset(quizData.CustomImageID);
     }
 }

@@ -1,27 +1,34 @@
 using DG.Tweening;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class UI_QuizResultScreen : MonoBehaviour
 {
     [SerializeField] private TMP_Text correctAnswer;
-    [SerializeField] private TMP_Text tapToContinue;
+    [SerializeField] private TMP_Text tapToContinueText;
+    [SerializeField] private GameObject tapToContinue;
     [SerializeField] private GameObject correct;
     [SerializeField] private GameObject wrong;
 
-    public void SetResult(QuizData quizData, bool correctAnswer)
+    public void SetResult(QuizData quizData, bool isCorrectAnswer)
     {
-        if (correctAnswer)
+        if (isCorrectAnswer)
             correct.SetActive(true);
         else
             wrong.SetActive(true);
 
-        this.correctAnswer.text = quizData.Answers[quizData.CorrectAnswerIndex].Text.ToString();
+        var answer = quizData.Answers[quizData.CorrectAnswerIndex];
 
-        tapToContinue.DOFade(1, 0.5f).SetDelay(2);
+        this.correctAnswer.text = answer.Text.ToString();
+
+        StartCoroutine(ShowTapToContinue());
     }
 
-
-
-    // show tap to continue
+    private IEnumerator ShowTapToContinue()
+    {
+        yield return new WaitForSeconds(2);
+        tapToContinue.SetActive(true);
+        tapToContinueText.DOFade(1, 0.5f);
+    }
 }

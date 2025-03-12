@@ -9,13 +9,6 @@ public class AddressableLoader: IAssetLoader
 {
     private readonly Dictionary<string, AsyncOperationHandle> loadedAssetHandles = new Dictionary<string, AsyncOperationHandle>();
 
-    /// <summary>
-    /// Loads an asset from the Addressables system asynchronously by its address (name or ID).
-    /// Implements caching: If the asset is already loaded, it returns the cached instance.
-    /// </summary>
-    /// <typeparam name="T">The type of asset to load (e.g., Texture2D, Sprite, GameObject).</typeparam>
-    /// <param name="assetId">The address (name or ID) of the asset in Addressables.</param>
-    /// <returns>The loaded asset of type T, or null if loading fails. The operation is wrapped in a Task for async handling.</returns>
     public async Task<T> LoadAssetAsync<T>(string assetId) where T : Object
     {
         if (loadedAssetHandles.TryGetValue(assetId, out AsyncOperationHandle existingHandle))
@@ -49,11 +42,6 @@ public class AddressableLoader: IAssetLoader
         }
     }
 
-    /// <summary>
-    /// Releases a loaded Addressable asset by its name/ID, freeing up resources.
-    /// It retrieves the handle from the internal cache using the asset name.
-    /// </summary>
-    /// <param name="assetId">The address (name or ID) of the asset to release.</param>
     public void ReleaseAsset(string assetId)
     {
         if (loadedAssetHandles.TryGetValue(assetId, out AsyncOperationHandle handle))
