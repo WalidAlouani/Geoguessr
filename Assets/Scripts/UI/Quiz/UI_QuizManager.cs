@@ -6,7 +6,7 @@ public class UI_QuizManager : MonoBehaviour
     [SerializeField] private UI_QuizQuestionScreen question; //Maybe IQuizScreen
     [SerializeField] private UI_QuizResultScreen result;
 
-    private QuizData quizData;
+    private TextQuiz quizData;
 
     private void OnEnable()
     {
@@ -18,12 +18,12 @@ public class UI_QuizManager : MonoBehaviour
         question.OnAnswered -= OnQuizAnswered;
     }
 
-    public void Initialize(QuizData quizData, IAssetLoader assetLoader)
+    public void Initialize(TextQuiz quizData)
     {
         this.quizData = quizData;
         result.gameObject.SetActive(false);
         question.gameObject.SetActive(true);
-        question.DisplayQuiz(quizData, assetLoader);
+        question.DisplayQuiz(quizData);
     }
 
     private void OnQuizAnswered(bool correctAnswer)

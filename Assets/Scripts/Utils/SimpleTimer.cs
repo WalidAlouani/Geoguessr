@@ -9,8 +9,7 @@ public class SimpleTimer
     private int lastSecond = -1;
 
     public event Action<int> OnSecondChanged;
-
-    public event Action OnTimerFinished;
+    public event Action OnTimeIsUp;
 
     public SimpleTimer(float startTimeInSeconds = 10f)
     {
@@ -28,7 +27,7 @@ public class SimpleTimer
         {
             currentTime = 0f;
             isTimerRunning = false;
-            OnTimerFinished?.Invoke();
+            OnTimeIsUp?.Invoke();
         }
 
         int currentSecond = Mathf.CeilToInt(currentTime);

@@ -11,7 +11,7 @@ public class UI_QuizFlagQuestionScreen : MonoBehaviour
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private int time = 15;
 
-    private QuizData quizData;
+    private FlagQuiz quizData;
     private SimpleTimer timer;
 
     public event Action<bool> OnAnswered;
@@ -24,25 +24,23 @@ public class UI_QuizFlagQuestionScreen : MonoBehaviour
     private void OnEnable()
     {
         timer.OnSecondChanged += OnTimeChanged;
-        timer.OnTimerFinished += OnTimerFinished;
+        timer.OnTimeIsUp += OnTimerFinished;
     }
 
     private void OnDisable()
     {
         timer.OnSecondChanged -= OnTimeChanged;
-        timer.OnTimerFinished -= OnTimerFinished;
+        timer.OnTimeIsUp -= OnTimerFinished;
     }
 
-    public async void DisplayQuiz(QuizData quizData, IAssetLoader assetLoader)
+    public void DisplayQuiz(FlagQuiz quizData)
     {
         this.quizData = quizData;
 
         question.text = quizData.Question;
-        for (int i = 0; i < quizData.Answers.Count; i++)
+        for (int i = 0; i < quizData.Answers.Length; i++)
         {
-            var answer = quizData.Answers[i];
-            var sprite = await assetLoader.LoadAssetAsync<Sprite>(answer.ImageID);
-            answers[i].Initialize(sprite);
+            answers[i].Initialize(quizData.Answers[i]);
         }
 
         StartCoroutine(StartQuiz());
@@ -51,7 +49,10 @@ public class UI_QuizFlagQuestionScreen : MonoBehaviour
     public void OnAnswerClicked(int index)
     {
         var correctAnswer = index == quizData.CorrectAnswerIndex;
+
         answers[index].SetResponse(correctAnswer);
+        if (!correctAnswer)
+            answers[quizData.CorrectAnswerIndex].SetResponse(true, false);
 
         EnableAnswers(false);
         timer.StopTimer();
@@ -79,7 +80,7 @@ public class UI_QuizFlagQuestionScreen : MonoBehaviour
 
     private void EnableAnswers(bool enable)
     {
-        for (int i = 0; i < quizData.Answers.Count; i++)
+        for (int i = 0; i < quizData.Answers.Length; i++)
         {
             var answer = quizData.Answers[i];
             answers[i].EnableClick(enable);

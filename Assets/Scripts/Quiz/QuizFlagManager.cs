@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class QuizFlagManager : MonoBehaviour
 {
+    public CountryCodes CountryCodes;
     public TextAsset quizFile;
     public UI_QuizManagerFlag uI_QuizManager;
     public event Action QuizFinished;
 
     private IAssetLoader assetLoader;
 
-    void Start()
+    async void Start()
     {
         assetLoader = new AddressableLoader();
 
         var quizData = JsonConvert.DeserializeObject<QuizData>(quizFile.text);
-        uI_QuizManager.Initialize(quizData, assetLoader);
+
+        var quiz = await QuizFactory.CreateQuizAsync(quizData, assetLoader, CountryCodes);
+
+        uI_QuizManager.Initialize((FlagQuiz)quiz);
     }
 
     public void OnQuizFinished()

@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class UI_QuizManagerFlag : MonoBehaviour
 {
-    [SerializeField] private UI_QuizFlagQuestionScreen question; //Maybe IQuizScreen
-    [SerializeField] private UI_QuizResultScreen result;
+    [SerializeField] private UI_QuizFlagQuestionScreen question; //Maybe IQuizView
+    [SerializeField] private UI_QuizFlagResultScreen result;
 
-    private QuizData quizData;
+    private FlagQuiz quizData;
 
     private void OnEnable()
     {
@@ -18,12 +18,12 @@ public class UI_QuizManagerFlag : MonoBehaviour
         question.OnAnswered -= OnQuizAnswered;
     }
 
-    public void Initialize(QuizData quizData, IAssetLoader assetLoader)
+    public void Initialize(FlagQuiz quizData)
     {
         this.quizData = quizData;
         result.gameObject.SetActive(false);
         question.gameObject.SetActive(true);
-        question.DisplayQuiz(quizData, assetLoader);
+        question.DisplayQuiz(quizData);
     }
 
     private void OnQuizAnswered(bool correctAnswer)

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_QuizResultScreen : MonoBehaviour
+public class UI_QuizFlagResultScreen : MonoBehaviour
 {
     [SerializeField] private TMP_Text correctAnswerText;
     [SerializeField] private Image correctAnswerImage;
@@ -13,17 +13,15 @@ public class UI_QuizResultScreen : MonoBehaviour
     [SerializeField] private GameObject correct;
     [SerializeField] private GameObject wrong;
 
-    public void SetResult(TextQuiz quizData, bool isCorrectAnswer)
+    public void SetResult(FlagQuiz quizData, bool isCorrectAnswer)
     {
         if (isCorrectAnswer)
             correct.SetActive(true);
         else
             wrong.SetActive(true);
 
-        var answer = quizData.Answers[quizData.CorrectAnswerIndex];
-
-        this.correctAnswerText.text = answer;
-        //this.correctAnswerImage.sprite = answer.Text.ToString();
+        correctAnswerImage.sprite = quizData.Answers[quizData.CorrectAnswerIndex];
+        correctAnswerText.text = quizData.CorrectCountryName;
 
         StartCoroutine(ShowTapToContinue());
     }

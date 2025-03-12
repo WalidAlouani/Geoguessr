@@ -12,9 +12,8 @@ public class UI_QuizQuestionScreen : MonoBehaviour
     [SerializeField] private TMP_Text timerText;
     [SerializeField] private int time = 15;
 
-    private QuizData quizData;
+    private TextQuiz quizData;
     private SimpleTimer timer;
-    private IAssetLoader assetLoader;
 
     public event Action<bool> OnAnswered;
 
@@ -26,28 +25,27 @@ public class UI_QuizQuestionScreen : MonoBehaviour
     private void OnEnable()
     {
         timer.OnSecondChanged += OnTimeChanged;
-        timer.OnTimerFinished += OnTimerFinished;
+        timer.OnTimeIsUp += OnTimerFinished;
     }
 
     private void OnDisable()
     {
         timer.OnSecondChanged -= OnTimeChanged;
-        timer.OnTimerFinished -= OnTimerFinished;
+        timer.OnTimeIsUp -= OnTimerFinished;
     }
 
-    public async void DisplayQuiz(QuizData quizData, IAssetLoader assetLoader)
+    public void DisplayQuiz(TextQuiz quizData)
     {
         this.quizData = quizData;
-        this.assetLoader = assetLoader;
 
         question.text = quizData.Question;
-        for (int i = 0; i < quizData.Answers.Count; i++)
+        for (int i = 0; i < quizData.Answers.Length; i++)
         {
             var answer = quizData.Answers[i];
-            answers[i].Initialize(answer.Text);
+            answers[i].Initialize(answer);
         }
 
-        image.sprite = await assetLoader.LoadAssetAsync<Sprite>(quizData.CustomImageID);
+        image.sprite = quizData.ReferenceImage;
 
         StartCoroutine(StartQuiz());
     }
@@ -83,7 +81,7 @@ public class UI_QuizQuestionScreen : MonoBehaviour
 
     private void EnableAnswers(bool enable)
     {
-        for (int i = 0; i < quizData.Answers.Count; i++)
+        for (int i = 0; i < quizData.Answers.Length; i++)
         {
             var answer = quizData.Answers[i];
             answers[i].EnableClick(enable);
@@ -93,10 +91,5 @@ public class UI_QuizQuestionScreen : MonoBehaviour
     private void Update()
     {
         timer?.Tick(Time.deltaTime);
-    }
-
-    private void OnDestroy()
-    {
-        assetLoader.ReleaseAsset(quizData.CustomImageID);
     }
 }
