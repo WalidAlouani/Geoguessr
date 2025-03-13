@@ -114,6 +114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2899235740997500455}
+  - component: {fileID: 1054381554878804952}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -137,3 +138,25 @@ Transform:
   - {fileID: 6749872083920625976}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1054381554878804952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6008838703116962831}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cec8f35061aac5243ac8a7cea9de8b69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderer: {fileID: 6808648157538198650}
+  materials:
+  - {fileID: 2100000, guid: ac958c9ae0aee4688b563a6af98d39de, type: 2}
+  - {fileID: 2100000, guid: a3d8e6ca171d4410fadaf0032c6dda2e, type: 2}
+  - {fileID: 2100000, guid: 03fd51e91f37d49f28dcf68377483e64, type: 2}
+  - {fileID: 2100000, guid: b8c35e45c99af4ac38324fb79d7019ec, type: 2}
+  - {fileID: 2100000, guid: e6f043715c282455f8e2e3e9cf7eb07c, type: 2}
+  - {fileID: 2100000, guid: a88a59feaa0024037ab3f8fc07d1a741, type: 2}
+  - {fileID: 2100000, guid: 76e73f3e9129d4c00b1ac4d54a095af6, type: 2}
+  - {fileID: 2100000, guid: 0a5e3f2abc3b0487894cc86a719a1b76, type: 2}

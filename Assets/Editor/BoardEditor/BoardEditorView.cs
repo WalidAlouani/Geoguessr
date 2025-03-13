@@ -3,6 +3,7 @@ using UnityEditor;
 using Tools.BoardEditor;
 using System;
 using System.Linq;
+using static UnityEngine.GraphicsBuffer;
 
 public class BoardEditorView : IBoardEditorView
 {
@@ -29,6 +30,8 @@ public class BoardEditorView : IBoardEditorView
         loopingPath = new LoopingPath();
         gridRenderer = new GridRenderer(gridWidth, gridHeight, tileSize);
         inputHandler = new InputHandler(loopingPath);
+
+        tileSize = config.TileSize;
     }
 
     public void OnEnter()
@@ -48,7 +51,6 @@ public class BoardEditorView : IBoardEditorView
         GUILayout.Label("Looping Form Tool", EditorStyles.boldLabel);
         gridWidth = EditorGUILayout.IntSlider("Grid Width", gridWidth, config.MinGridWidth, config.MaxGridWidth);
         gridHeight = EditorGUILayout.IntSlider("Grid Height", gridHeight, config.MinGridHeight, config.MaxGridHeight);
-        tileSize = EditorGUILayout.FloatField("Tile Size", config.TileSize);
 
         if (GUILayout.Button("Reset"))
         {
@@ -96,13 +98,32 @@ public class BoardEditorView : IBoardEditorView
 
         if (loopingPath.IsLoopClosed && GUILayout.Button("Save Board"))
         {
-            controller.CurrentBoard.Tiles = loopingPath.Path.Select(el => new TileData() { Position = (el.x, el.y)}).ToList();
+            controller.CurrentBoard.Tiles = loopingPath.Path.Select(el => new TileData() { Position = new Coordinates() { X = el.x, Y = el.y } }).ToList();
             controller.SaveBoard();
+
+            SaveScriptableObject();
         }
 
         if (GUILayout.Button("Back"))
         {
             changeView.Invoke(BoardEditorScreen.BoardList);
         }
+    }
+
+
+    private void SaveScriptableObject()
+    {
+        var assetPath = $"Assets/ScriptableObjects/BoardData/BoardData{controller.CurrentBoard.Id}.asset";
+
+        var boardDataSO = AssetDatabase.LoadAssetAtPath<BoardDataSO>(assetPath);
+        if (boardDataSO == null)
+        {
+            boardDataSO = ScriptableObject.CreateInstance<BoardDataSO>();
+            AssetDatabase.CreateAsset(boardDataSO, assetPath);
+        }
+
+        boardDataSO.SetTiles(controller.CurrentBoard.Tiles);
+        EditorUtility.SetDirty(boardDataSO);
+        AssetDatabase.SaveAssets();
     }
 }
