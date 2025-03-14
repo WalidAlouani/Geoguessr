@@ -13,7 +13,7 @@ public class QuizFileHandler
     public QuizFileHandler(IDataSerializer<QuizData> serializer, string directory)
     {
         this.serializer = serializer;
-        this.directory = Path.Combine(Application.streamingAssetsPath, directory);
+        this.directory = directory;
 
         if (!Directory.Exists(this.directory))
         {

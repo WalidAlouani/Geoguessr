@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
 
 namespace Tools.BoardEditor
 {
@@ -13,7 +15,7 @@ namespace Tools.BoardEditor
         public BoardEditorController(BoardEditorSO config)
         {
             var BoardSerializer = new BoardSerializerJson();
-            fileHandler = new BoardFileHandler(BoardSerializer, config.SaveDirectory);
+            fileHandler = new BoardFileHandler(BoardSerializer, config.SaveDirectoryXML);
             Config = config;
             RefreshBoardList();
         }
@@ -35,6 +37,8 @@ namespace Tools.BoardEditor
 
             fileHandler.SaveBoard(CurrentBoard);
             RefreshBoardList();
+
+            SaveScriptableObject();
         }
 
         public void DeleteBoard(string fileName)
@@ -55,6 +59,22 @@ namespace Tools.BoardEditor
                 return false;
 
             return fileHandler.IsBoardFileExist(CurrentBoard);
+        }
+
+        private void SaveScriptableObject()
+        {
+            var assetPath = $"{Config.SaveDirectorySO}/BoardData{CurrentBoard.Id}.asset";
+
+            var boardDataSO = AssetDatabase.LoadAssetAtPath<BoardDataSO>(assetPath);
+            if (boardDataSO == null)
+            {
+                boardDataSO = ScriptableObject.CreateInstance<BoardDataSO>();
+                AssetDatabase.CreateAsset(boardDataSO, assetPath);
+            }
+
+            boardDataSO.SetTiles(CurrentBoard.Tiles);
+            EditorUtility.SetDirty(boardDataSO);
+            AssetDatabase.SaveAssets();
         }
     }
 }

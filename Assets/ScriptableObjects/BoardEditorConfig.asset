@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3f93611ecb3e3f47bb11f15e668c4f6, type: 3}
   m_Name: BoardEditorConfig
   m_EditorClassIdentifier: 
-  SaveDirectory: BoardData
+  SaveDirectoryXML: Assets/StreamingAssets/BoardData
+  SaveDirectorySO: Assets/ScriptableObjects/BoardData
   MinGridWidth: 5
   MinGridHeight: 5
   MaxGridWidth: 20

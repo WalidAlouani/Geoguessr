@@ -15,7 +15,7 @@ public class BoardFileHandler
     public BoardFileHandler(IDataSerializer<BoardData> serializer, string directory)
     {
         this.serializer = serializer;
-        BoardsDirectory = Path.Combine(Application.streamingAssetsPath, directory);
+        BoardsDirectory = directory;
 
         if (!Directory.Exists(BoardsDirectory))
         {

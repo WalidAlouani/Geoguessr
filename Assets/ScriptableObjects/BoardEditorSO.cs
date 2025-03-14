@@ -4,7 +4,8 @@ using UnityEngine;
 public class BoardEditorSO : ScriptableObject
 {
     [Header("Storage Section")]
-    public string SaveDirectory;
+    public string SaveDirectoryXML;
+    public string SaveDirectorySO;
     //public BoardSerializerType SerializerType;
 
     [Header("Grid Section")]

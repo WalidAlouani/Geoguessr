@@ -58,7 +58,7 @@ namespace Tools.BoardEditor
                         }
                         else
                         {
-                            EditorGUI.DrawRect(tileRect, new Color(0.5f, 1f, 0.5f, 0.5f));
+                            EditorGUI.DrawRect(tileRect, GetColorForTile(path.GetType(tilePos)));
                         }
 
                         // Draw order number on the tile
@@ -102,6 +102,23 @@ namespace Tools.BoardEditor
                 }
             }
             return -1; // Should not happen if ContainsTile is used correctly before
+        }
+
+        private Color GetColorForTile(TileType type)
+        {
+            switch (type)
+            {
+                case TileType.Home:
+                    return Color.yellow;
+                case TileType.Base:
+                    return new Color(0.5f, 1f, 0.5f, 0.5f);
+                case TileType.Quiz:
+                    return Color.blue;
+                case TileType.QuizFlag:
+                    return Color.red;
+                default:
+                    return Color.gray;
+            }
         }
     }
 }

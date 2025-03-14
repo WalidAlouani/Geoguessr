@@ -5,19 +5,14 @@ using System.Collections;
 
 public class TurnManager : MonoBehaviour
 {
-    public List<PlayerController> players;
-
-    private int currentPlayerIndex = 0;
+    private PlayersManager playersManager;
 
     public event Action OnTurnPlayed;
 
-    void Start()
+    public void Init(PlayersManager playersManager)
     {
-        if (players == null || players.Count == 0)
-        {
-            Debug.LogError("No players assigned to TurnManager!");
-            return;
-        }
+        this.playersManager = playersManager;
+
         SubscribeToCurrentPlayer();
     }
 
@@ -26,8 +21,8 @@ public class TurnManager : MonoBehaviour
     {
         // Generate a random number between 0 and 10 (inclusive).
         int randomSteps = UnityEngine.Random.Range(1, 11);
-        Debug.Log("Player " + currentPlayerIndex + " rolls: " + randomSteps);
-        players[currentPlayerIndex].MoveSteps(randomSteps);
+        Debug.Log("Player " + playersManager.Current.Index + " rolls: " + randomSteps);
+        playersManager.Current.MoveSteps(randomSteps);
         OnTurnPlayed?.Invoke();
         return randomSteps;
     }
@@ -35,13 +30,13 @@ public class TurnManager : MonoBehaviour
     // Subscribe to the current player's move-completion event.
     private void SubscribeToCurrentPlayer()
     {
-        players[currentPlayerIndex].OnMoveComplete += OnPlayerMoveComplete;
+        playersManager.Current.OnMoveComplete += OnPlayerMoveComplete;
     }
 
     // Unsubscribe from the current player's event to avoid duplicate subscriptions.
     private void UnsubscribeFromCurrentPlayer()
     {
-        players[currentPlayerIndex].OnMoveComplete -= OnPlayerMoveComplete;
+        playersManager.Current.OnMoveComplete -= OnPlayerMoveComplete;
     }
 
     // Called when the current player's move is complete.
@@ -49,11 +44,11 @@ public class TurnManager : MonoBehaviour
     {
         UnsubscribeFromCurrentPlayer();
         // Advance turn.
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
-        Debug.Log("Now it is player " + currentPlayerIndex + "'s turn.");
+        playersManager.NextPlayer();
+        Debug.Log("Now it is player " + playersManager.Current.Index + "'s turn.");
         SubscribeToCurrentPlayer();
 
-        if (players[currentPlayerIndex].isAI)
+        if (playersManager.Current.isAI)
         {
             StartCoroutine(AIAutoMove());
         }

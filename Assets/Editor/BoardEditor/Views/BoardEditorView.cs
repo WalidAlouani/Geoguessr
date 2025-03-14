@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEditor;
 using System;
-using System.Linq;
 
 namespace Tools.BoardEditor
 {
@@ -12,6 +11,7 @@ namespace Tools.BoardEditor
         private float tileSize = 40f;
         private Rect gridRect;
         private Vector2 scrollPos;
+        private TileType currentSelectedTileType;
 
         private LoopingPath loopingPath;
         private GridRenderer gridRenderer;
@@ -36,8 +36,7 @@ namespace Tools.BoardEditor
 
         public void OnEnter()
         {
-            var tilesData = controller.CurrentBoard.Tiles.Select(el => new Vector2Int(el.Position.X, el.Position.Y)).ToList();
-            loopingPath.SetPath(tilesData);
+            loopingPath.SetData(controller.CurrentBoard.Tiles);
         }
 
         public void OnExit()
@@ -52,6 +51,8 @@ namespace Tools.BoardEditor
             gridWidth = EditorGUILayout.IntSlider("Grid Width", gridWidth, config.MinGridWidth, config.MaxGridWidth);
             gridHeight = EditorGUILayout.IntSlider("Grid Height", gridHeight, config.MinGridHeight, config.MaxGridHeight);
 
+            RenderTileTypeButtons();
+
             if (GUILayout.Button("Reset"))
             {
                 loopingPath.Reset();
@@ -65,7 +66,7 @@ namespace Tools.BoardEditor
 
             // Update grid and input parameters.
             gridRenderer.UpdateParameters(gridWidth, gridHeight, tileSize, gridRect);
-            inputHandler.UpdateParameters(gridRect, tileSize);
+            inputHandler.UpdateParameters(gridRect, tileSize, currentSelectedTileType);
 
             // Process input (now fully delegated to the InputHandler).
             inputHandler.ProcessInput(Event.current, gridWidth, gridHeight);
@@ -85,39 +86,42 @@ namespace Tools.BoardEditor
             EditorGUILayout.EndScrollView();
         }
 
+        private void RenderTileTypeButtons()
+        {
+            if (!loopingPath.IsLoopClosed)
+                return;
+
+            GUILayout.Space(10);
+
+            GUILayout.Label("Select Tile Type:", EditorStyles.boldLabel);
+            GUILayout.BeginHorizontal();
+
+            for (int i = 0; i < Enum.GetValues(typeof(TileType)).Length; i++)
+            {
+                var enumValue = (TileType)i;
+                if (GUILayout.Button(enumValue.ToString()))
+                {
+                    currentSelectedTileType = enumValue;
+                }
+            }
+
+            GUILayout.EndHorizontal();
+        }
+
         private void RenderControlButtons()
         {
             GUILayout.Space(10);
 
             if (loopingPath.IsLoopClosed && GUILayout.Button("Save Board"))
             {
-                controller.CurrentBoard.Tiles = loopingPath.Path.Select(el => new TileData() { Position = new Coordinates() { X = el.x, Y = el.y } }).ToList();
+                controller.CurrentBoard.Tiles = loopingPath.GetData();
                 controller.SaveBoard();
-
-                SaveScriptableObject();
             }
 
             if (GUILayout.Button("Back"))
             {
                 changeView.Invoke(BoardEditorScreen.BoardList);
             }
-        }
-
-
-        private void SaveScriptableObject()
-        {
-            var assetPath = $"Assets/ScriptableObjects/BoardData/BoardData{controller.CurrentBoard.Id}.asset";
-
-            var boardDataSO = AssetDatabase.LoadAssetAtPath<BoardDataSO>(assetPath);
-            if (boardDataSO == null)
-            {
-                boardDataSO = ScriptableObject.CreateInstance<BoardDataSO>();
-                AssetDatabase.CreateAsset(boardDataSO, assetPath);
-            }
-
-            boardDataSO.SetTiles(controller.CurrentBoard.Tiles);
-            EditorUtility.SetDirty(boardDataSO);
-            AssetDatabase.SaveAssets();
         }
     }
 }

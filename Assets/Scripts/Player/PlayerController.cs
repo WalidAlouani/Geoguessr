@@ -5,14 +5,26 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
     public BoardManager boardManager;
-    public float moveSpeed = 2f; // Speed for animation
-    public bool isAI = false;
+    [SerializeField] private PlayerVisual visual;
+    [SerializeField] private float moveSpeed = 2f; // Speed for animation
+
+    public int Index { get; private set; }
+    public string Name { get; private set; }
+    public bool isAI { get; private set; }
 
     private int currentTileIndex = 0;
 
     // Event that is invoked when the move is complete.
     public event Action<int> OnTileReached;
     public event Action OnMoveComplete;
+
+    public void Init(int index, PlayerData playerData)
+    {
+        Index = index;
+        Name = playerData.Name;
+        isAI = playerData.Type == PlayerType.AI;
+        visual.SetVisual(index);
+    }
 
     // Called to move the player a given number of steps.
     public void MoveSteps(int steps)
@@ -43,6 +55,9 @@ public class PlayerController : MonoBehaviour
             }
 
             OnTileReached?.Invoke(currentTileIndex);
+
+            nextTile.OnTileReached();// remove
+
             currentTileIndex++;
         }
         // Signal that movement is complete.

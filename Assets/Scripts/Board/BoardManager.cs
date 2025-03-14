@@ -32,10 +32,10 @@ public class BoardManager : MonoBehaviour
             switch (tileData.Type)
             {
                 case TileType.Base:
-                    if (i == 0)
-                        prefab = tileHomePrefab;
-                    else
-                        prefab = tilePrefab;
+                    prefab = tilePrefab;
+                    break;
+                case TileType.Home:
+                    prefab = tileHomePrefab;
                     break;
                 case TileType.Quiz:
                     prefab = tileQuizPrefab;
@@ -48,6 +48,7 @@ public class BoardManager : MonoBehaviour
                     break;
             }
             var tileItem = Instantiate(prefab, position, Quaternion.identity, transform);
+            tileItem.Init(i);
             tileItems.Add(tileItem);
         }
     }
@@ -55,5 +56,10 @@ public class BoardManager : MonoBehaviour
     public TileItem GetTile(int nextTileIndex)
     {
         return tileItems[nextTileIndex % TilesCount];
+    }
+
+    public TileItem GetHomeTile()
+    {
+        return GetTile(0);
     }
 }

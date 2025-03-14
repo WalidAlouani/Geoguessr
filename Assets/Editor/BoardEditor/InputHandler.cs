@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Linq;
+using System;
 
 namespace Tools.BoardEditor
 {
@@ -8,6 +9,7 @@ namespace Tools.BoardEditor
         private bool isDragging = false;
         private Rect gridRect;
         private float tileSize;
+        private TileType tileType;
         private LoopingPath loopingPath;
 
         public InputHandler(LoopingPath loopingPath)
@@ -15,10 +17,11 @@ namespace Tools.BoardEditor
             this.loopingPath = loopingPath;
         }
 
-        public void UpdateParameters(Rect gridRect, float tileSize)
+        public void UpdateParameters(Rect gridRect, float tileSize, TileType currentSelectedTileType)
         {
             this.gridRect = gridRect;
             this.tileSize = tileSize;
+            this.tileType = currentSelectedTileType;
         }
 
         public void ProcessInput(Event e, int gridWidth, int gridHeight)
@@ -37,6 +40,7 @@ namespace Tools.BoardEditor
                 {
                     if (loopingPath.IsLoopClosed)
                     {
+                        loopingPath.ChangeType(tilePos, tileType);
                         e.Use();
                         return;
                     }
