@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
 
     public int Index { get; private set; }
     public string Name { get; private set; }
-    public bool isAI { get; private set; }
 
     private int currentTileIndex = 0;
 
@@ -22,7 +21,6 @@ public class PlayerController : MonoBehaviour
     {
         Index = index;
         Name = playerData.Name;
-        isAI = playerData.Type == PlayerType.AI;
         visual.SetVisual(index);
     }
 
@@ -62,5 +60,9 @@ public class PlayerController : MonoBehaviour
         }
         // Signal that movement is complete.
         OnMoveComplete?.Invoke();
+    }
+
+    public virtual void TurnStarted()
+    {
     }
 }

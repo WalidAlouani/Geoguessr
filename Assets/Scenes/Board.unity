@@ -242,6 +242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   top: {fileID: 905361749}
   bottom: {fileID: 520576836}
+  rollDiceButton: {fileID: 2091343597}
 --- !u!1 &11259191
 GameObject:
   m_ObjectHideFlags: 0
@@ -6789,8 +6790,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfc74f37191c2514eb2134cbd91c33a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playersManager: {fileID: 1842744222}
   boardData: {fileID: 11400000, guid: 8a607b64242bdb2469df14894ff93b23, type: 2}
+  playersManager: {fileID: 1842744222}
   boardManager: {fileID: 1204229137}
   turnManager: {fileID: 1842744221}
   cameraBoundaries: {fileID: 1142996497}
@@ -6843,6 +6844,8 @@ MonoBehaviour:
   - Name: Player4
     Type: 1
   playerPrefab: {fileID: 3151441859500247785, guid: 3e7cb15866b2044c4821d261c3bfeeb2,
+    type: 3}
+  playerAIPrefab: {fileID: 3151441859500247785, guid: ae38b3bc37a5fb74fa5d73e08f5394ff,
     type: 3}
 --- !u!1 &1884042184
 GameObject:
@@ -7400,7 +7403,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27aad1849701ea0459c37df24e295a62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnManager: {fileID: 1842744221}
   button: {fileID: 2091343594}
   image: {fileID: 1043418782}
   text: {fileID: 1084264961}

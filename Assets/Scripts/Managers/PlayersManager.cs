@@ -8,6 +8,7 @@ public class PlayersManager : MonoBehaviour
 {
     [SerializeField] private List<PlayerData> playersData;
     [SerializeField] private PlayerController playerPrefab;
+    [SerializeField] private PlayerControllerAI playerAIPrefab;
 
     private BoardManager boardManager;
     private List<PlayerController> players;
@@ -22,8 +23,10 @@ public class PlayersManager : MonoBehaviour
 
         for (int i = 0; i < playersData.Count; i++)
         {
-            var player = Instantiate(playerPrefab, initialPosition, Quaternion.identity);
-            player.Init(i, playersData[i]);
+            var playerData = playersData[i];
+            var prefab = playerData.Type == PlayerType.AI ? playerAIPrefab : playerPrefab;
+            var player = Instantiate(prefab, initialPosition, Quaternion.identity);
+            player.Init(i, playerData);
             player.boardManager = boardManager; // hack remove later
             players.Add(player);
         }

@@ -7,8 +7,6 @@ public class TurnManager : MonoBehaviour
 {
     private PlayersManager playersManager;
 
-    public event Action OnTurnPlayed;
-
     public void Init(PlayersManager playersManager)
     {
         this.playersManager = playersManager;
@@ -16,47 +14,42 @@ public class TurnManager : MonoBehaviour
         SubscribeToCurrentPlayer();
     }
 
-    // Called by the UI button.
-    public int RollDice()
+    private void OnEnable()
     {
-        // Generate a random number between 0 and 10 (inclusive).
-        int randomSteps = UnityEngine.Random.Range(1, 11);
-        Debug.Log("Player " + playersManager.Current.Index + " rolls: " + randomSteps);
-        playersManager.Current.MoveSteps(randomSteps);
-        OnTurnPlayed?.Invoke();
-        return randomSteps;
+        GameEvents.OnDiceRolled += OnDiceRolled;
     }
 
-    // Subscribe to the current player's move-completion event.
+    private void OnDisable()
+    {
+        GameEvents.OnDiceRolled -= OnDiceRolled;
+    }
+
+    public void OnDiceRolled(int steps)
+    {
+        Debug.Log("Player " + playersManager.Current.Index + " rolls: " + steps);
+        playersManager.Current.MoveSteps(steps);
+    }
+
     private void SubscribeToCurrentPlayer()
     {
         playersManager.Current.OnMoveComplete += OnPlayerMoveComplete;
     }
 
-    // Unsubscribe from the current player's event to avoid duplicate subscriptions.
     private void UnsubscribeFromCurrentPlayer()
     {
         playersManager.Current.OnMoveComplete -= OnPlayerMoveComplete;
     }
 
-    // Called when the current player's move is complete.
     private void OnPlayerMoveComplete()
     {
         UnsubscribeFromCurrentPlayer();
-        // Advance turn.
+
         playersManager.NextPlayer();
+
         Debug.Log("Now it is player " + playersManager.Current.Index + "'s turn.");
+
         SubscribeToCurrentPlayer();
 
-        if (playersManager.Current.isAI)
-        {
-            StartCoroutine(AIAutoMove());
-        }
-    }
-
-    private IEnumerator AIAutoMove()
-    {
-        yield return new WaitForSeconds(2f); // Delay to simulate AI
-        RollDice();
+        playersManager.Current.TurnStarted();
     }
 }

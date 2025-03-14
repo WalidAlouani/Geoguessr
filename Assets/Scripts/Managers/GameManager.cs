@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private PlayersManager playersManager;
     [SerializeField] private BoardDataSO boardData;
+    [SerializeField] private PlayersManager playersManager;
     [SerializeField] private BoardManager boardManager;
     [SerializeField] private TurnManager turnManager;
     [SerializeField] private CameraBoundaries cameraBoundaries;

@@ -7,20 +7,7 @@ public class UI_BoardManager : MonoBehaviour
 {
     [SerializeField] private RectTransform top;
     [SerializeField] private RectTransform bottom;
+    [SerializeField] private UI_ButtonRandom rollDiceButton;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    private void OnEnable()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

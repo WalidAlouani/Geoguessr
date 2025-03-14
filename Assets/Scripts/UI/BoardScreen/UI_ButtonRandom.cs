@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -7,7 +8,6 @@ using UnityEngine.UI;
 
 public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private TurnManager turnManager;//remove later
     [SerializeField] private Button button;
     [SerializeField] private Image image;
     [SerializeField] private TMP_Text text;
@@ -17,6 +17,16 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private WaitForSeconds wait = new WaitForSeconds(0.02f);
 
     //subscribe to game state
+
+    private void OnEnable()
+    {
+        GameEvents.OnDiceRollRequested += ThrowDice;
+    }
+
+    private void OnDisable()
+    {
+        GameEvents.OnDiceRollRequested -= ThrowDice;
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -30,23 +40,12 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        StartCoroutine(ThrowDice());
+        GameEvents.RequestDiceRoll();
     }
 
-    private IEnumerator ThrowDice()
+    public void ThrowDice()
     {
-        //button.interactable = false;
-        text.gameObject.SetActive(true);
-
-        for (int i = 0; i < 10; i++)
-        {
-            text.text = i.ToString();
-            yield return wait;
-        }
-
-        var steps = turnManager.RollDice();
-
-        text.text = steps.ToString();
+        StartCoroutine(ThrowDiceCoroutine());
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -61,5 +60,22 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void OnPointerDown(PointerEventData eventData)
     {
         image.DOFade(0, 0.15f);
+    }
+
+    private IEnumerator ThrowDiceCoroutine()
+    {
+        //button.interactable = false;
+        text.gameObject.SetActive(true);
+
+        for (int i = 0; i < 10; i++)
+        {
+            text.text = i.ToString();
+            yield return wait;
+        }
+
+        var steps = UnityEngine.Random.Range(1, 11);
+        text.text = steps.ToString();
+
+        GameEvents.DiceRolled(steps);
     }
 }
