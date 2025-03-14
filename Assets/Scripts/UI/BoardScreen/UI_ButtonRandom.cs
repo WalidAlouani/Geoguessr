@@ -1,7 +1,5 @@
 using DG.Tweening;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,7 +7,7 @@ using UnityEngine.UI;
 
 public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
-    [SerializeField] private GameManager gameManager;//remove later
+    [SerializeField] private TurnManager turnManager;//remove later
     [SerializeField] private Button button;
     [SerializeField] private Image image;
     [SerializeField] private TMP_Text text;
@@ -22,24 +20,22 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("OnPointerEnter");
         isInside = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        Debug.Log("OnPointerExit");
         isInside = false;
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Debug.Log("OnPointerClick");
-        StartCoroutine(ThrowDie());
+        StartCoroutine(ThrowDice());
     }
 
-    private IEnumerator ThrowDie()
+    private IEnumerator ThrowDice()
     {
+        //button.interactable = false;
         text.gameObject.SetActive(true);
 
         for (int i = 0; i < 10; i++)
@@ -48,12 +44,13 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
             yield return wait;
         }
 
-        text.text = gameManager.PlayTurn().ToString();
+        var steps = turnManager.RollDice();
+
+        text.text = steps.ToString();
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        Debug.Log("OnPointerUp");
         if (isInside)
             return;
 
@@ -63,7 +60,6 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("OnPointerDown");
         image.DOFade(0, 0.15f);
     }
 }

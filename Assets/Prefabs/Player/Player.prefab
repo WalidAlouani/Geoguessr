@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3754201218625560270}
   - component: {fileID: 7450095727243652931}
   - component: {fileID: 951036428085233745}
+  - component: {fileID: 5749786821036912761}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -105,6 +106,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5749786821036912761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3320568922921578396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0654b5acbe81564aace3c8568e26aa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationDuration: 0.3
+  delayBetweenLoops: 7
+  rotationAmount: {x: 0, y: 360, z: 0}
+  rotationEase: 1
 --- !u!1 &5517808263013071344
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1589785898346101236}
+  - component: {fileID: 3151441859500247785}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -137,3 +155,17 @@ Transform:
   - {fileID: 619675264534976544}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3151441859500247785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5517808263013071344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52e658cd5f01a6247a453910a0cc916d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boardManager: {fileID: 0}
+  moveSpeed: 2

@@ -4,27 +4,31 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour
 {
-    [SerializeField] private GameObject tilePrefab;
-    [SerializeField] private GameObject tileHomePrefab;
-    [SerializeField] private GameObject tileQuizPrefab;
-    [SerializeField] private GameObject tileQuizFlagPrefab;
+    [SerializeField] private TileItem tilePrefab;
+    [SerializeField] private TileItem tileHomePrefab;
+    [SerializeField] private TileItem tileQuizPrefab;
+    [SerializeField] private TileItem tileQuizFlagPrefab;
 
-    private List<TileData> tiles;
+    private List<TileData> tileDatas;
+    private List<TileItem> tileItems;
     private float multiplier = 0.5f;
+    public int TilesCount { get; private set; }
 
     public void Init(List<TileData> tileDatas)
     {
-        tiles = tileDatas;
+        this.tileDatas = tileDatas;
+        TilesCount = tileDatas.Count;
         CreateBoard();
     }
 
     private void CreateBoard()
     {
-        for (int i = 0; i < tiles.Count; i++)
+        tileItems = new List<TileItem>();
+        for (int i = 0; i < tileDatas.Count; i++)
         {
-            var tileData = tiles[i];
+            var tileData = tileDatas[i];
             var position = new Vector3(tileData.Position.X * multiplier, 0, tileData.Position.Y * multiplier);
-            GameObject prefab = null;
+            TileItem prefab = null;
             switch (tileData.Type)
             {
                 case TileType.Base:
@@ -43,7 +47,13 @@ public class BoardManager : MonoBehaviour
                     prefab = tilePrefab;
                     break;
             }
-            Instantiate(prefab, position, Quaternion.identity, transform);
+            var tileItem = Instantiate(prefab, position, Quaternion.identity, transform);
+            tileItems.Add(tileItem);
         }
+    }
+
+    public TileItem GetTile(int nextTileIndex)
+    {
+        return tileItems[nextTileIndex % TilesCount];
     }
 }
