@@ -106,7 +106,7 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         SetState(true);
 
-        if (signal.Player is not PlayerControllerAI)
+        if (signal.Player.Type == PlayerType.Humain)
             button.interactable = true;
     }
 }

@@ -95,16 +95,20 @@ namespace Tools.BoardEditor
 
             GUILayout.Label("Select Tile Type:", EditorStyles.boldLabel);
             GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
 
-            for (int i = 0; i < Enum.GetValues(typeof(TileType)).Length; i++)
+            var tilesTypeCount = Enum.GetValues(typeof(TileType)).Length;
+
+            for (int i = 0; i < tilesTypeCount; i++)
             {
                 var enumValue = (TileType)i;
-                if (GUILayout.Button(enumValue.ToString()))
+                if (GUILayout.Button(enumValue.ToString(), GUILayout.Width(70), GUILayout.Height(70)))
                 {
                     currentSelectedTileType = enumValue;
                 }
             }
 
+            GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
         }
 

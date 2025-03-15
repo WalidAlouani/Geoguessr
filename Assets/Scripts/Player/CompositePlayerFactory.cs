@@ -13,7 +13,7 @@ public class CompositePlayerFactory : IPlayerFactory
         _playerPrefabMapping = playerPrefabMapping;
     }
 
-    public PlayerController Create(PlayerData playerData, Vector3 initialPosition, int index)
+    public PlayerController Create(Player playerData, Vector3 initialPosition)
     {
         var entry = _playerPrefabMapping.entries.Find(e => e.playerType == playerData.Type);
         if (entry == null)
@@ -28,7 +28,7 @@ public class CompositePlayerFactory : IPlayerFactory
             throw new Exception("The prefab for " + playerData.Type + " does not have a PlayerController component.");
         }
 
-        player.Init(index, playerData);
+        player.Init(playerData);
         return player;
     }
 }

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PlayerPrefabMapping", menuName = "ScriptableObjects/Player/PrefabMapping", order = 4)]
+[CreateAssetMenu(fileName = "PlayerPrefabMapping", menuName = "ScriptableObjects/PlayerPrefabMapping", order = 4)]
 public class PlayerPrefabMapping : ScriptableObject
 {
     public List<PlayerPrefabEntry> entries;

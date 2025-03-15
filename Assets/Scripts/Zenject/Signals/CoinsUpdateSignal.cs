@@ -1,8 +1,8 @@
-public class TurnEndedSignal
+public class CoinsUpdateSignal
 {
     public Player Player { get; private set; }
 
-    public TurnEndedSignal(Player player)
+    public CoinsUpdateSignal(Player player)
     {
         Player = player;
     }

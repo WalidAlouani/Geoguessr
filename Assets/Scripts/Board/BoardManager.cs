@@ -1,54 +1,69 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 public class BoardManager : MonoBehaviour
 {
-    [SerializeField] private TileItem tilePrefab;
-    [SerializeField] private TileItem tileHomePrefab;
-    [SerializeField] private TileItem tileQuizPrefab;
-    [SerializeField] private TileItem tileQuizFlagPrefab;
-
-    private List<TileData> tileDatas;
     private List<TileItem> tileItems;
-    private float multiplier = 0.5f;
+    private float multiplier = .5f;
     public int TilesCount { get; private set; }
+
+    private SignalBus _signalBus;
+    private ITileFactory _tileFactory;
+
+    [Inject]
+    public void Construct(ITileFactory tileFactory, SignalBus signalBus)
+    {
+        _signalBus = signalBus;
+        _tileFactory = tileFactory;
+    }
 
     public void Init(List<TileData> tileDatas)
     {
-        this.tileDatas = tileDatas;
         TilesCount = tileDatas.Count;
-        CreateBoard();
+        CreateBoard(tileDatas);
     }
 
-    private void CreateBoard()
+    private void OnEnable()
+    {
+        _signalBus.Subscribe<TileReachedSignal>(OnTileReached);
+        _signalBus.Subscribe<TileStoppedSignal>(OnTileStopped);
+    }
+
+    private void OnDisable()
+    {
+        _signalBus.Unsubscribe<TileReachedSignal>(OnTileReached);
+        _signalBus.Unsubscribe<TileStoppedSignal>(OnTileStopped);
+    }
+
+    private void CreateBoard(List<TileData> tileDatas)
     {
         tileItems = new List<TileItem>();
         for (int i = 0; i < tileDatas.Count; i++)
         {
             var tileData = tileDatas[i];
             var position = new Vector3(tileData.Position.X * multiplier, 0, tileData.Position.Y * multiplier);
-            TileItem prefab = null;
+
+            var tileItem = _tileFactory.CreateTile(tileData, position, transform);
+            tileItem.Init(i);
+
             switch (tileData.Type)
             {
-                case TileType.Base:
-                    prefab = tilePrefab;
-                    break;
                 case TileType.Home:
-                    prefab = tileHomePrefab;
+                    tileItem.SetEvent(null, new CoinRewardEvent(10000));
+                    break;
+                case TileType.Base:
+                    tileItem.SetEvent(new CoinRewardEvent(1000), null);
                     break;
                 case TileType.Quiz:
-                    prefab = tileQuizPrefab;
+                    //tileItem.SetEvent(new CoinRewardEvent(100), null);
                     break;
                 case TileType.QuizFlag:
-                    prefab = tileQuizFlagPrefab;
-                    break;
-                default:
-                    prefab = tilePrefab;
+                    //tileItem.SetEvent(new CoinRewardEvent(100), null);
                     break;
             }
-            var tileItem = Instantiate(prefab, position, Quaternion.identity, transform);
-            tileItem.Init(i);
+
             tileItems.Add(tileItem);
         }
     }
@@ -66,5 +81,29 @@ public class BoardManager : MonoBehaviour
     public Vector3 GetHomeTilePosition()
     {
         return GetTilePosition(0);
+    }
+
+    public List<Vector3> GetTiles(int currentTileIndex, int steps)
+    {
+        List<Vector3> tiles = new List<Vector3>();
+        int targetTileIndex = currentTileIndex + steps;
+        while (currentTileIndex < targetTileIndex)
+        {
+            currentTileIndex++;
+            Vector3 nextTile = GetTilePosition(currentTileIndex);
+            tiles.Add(nextTile);
+        }
+
+        return tiles;
+    }
+
+    private void OnTileReached(TileReachedSignal signal)
+    {
+        GetTile(signal.TileIndex).TriggerOnReachEvent(signal.Player, null);
+    }
+
+    private void OnTileStopped(TileStoppedSignal signal)
+    {
+        GetTile(signal.TileIndex).TriggerOnStopEvent(signal.Player, null);
     }
 }

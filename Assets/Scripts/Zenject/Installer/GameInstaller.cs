@@ -4,18 +4,28 @@ using Zenject;
 public class GameInstaller : MonoInstaller<GameInstaller>
 {
     [SerializeField] private PlayerPrefabMapping playerPrefabMapping;
+    [SerializeField] private TilePrefabMapping tilePrefabMapping;
     
     public override void InstallBindings()
     {
         SignalBusInstaller.Install(Container);
+        Container.DeclareSignal<PlayerCreatedSignal>();
         Container.DeclareSignal<RollDiceSignal>();
         Container.DeclareSignal<DiceRolledSignal>();
         Container.DeclareSignal<TurnStartedSignal>();
-
-        Container.BindInterfacesAndSelfTo<TurnManager>().AsSingle();
+        Container.DeclareSignal<TurnEndedSignal>();
+        Container.DeclareSignal<PlayerStartMoveSignal>();
+        Container.DeclareSignal<TileReachedSignal>();
+        Container.DeclareSignal<TileStoppedSignal>();
+        Container.DeclareSignal<CoinsUpdateSignal>();
         
         Container.Bind<IPlayerFactory>().To<CompositePlayerFactory>().AsSingle();
-        
         Container.BindInstance(playerPrefabMapping).IfNotBound();
+
+        Container.Bind<ITileFactory>().To<CompositeTileFactory>().AsSingle();
+        Container.BindInstance(tilePrefabMapping).IfNotBound();
+
+        Container.BindInterfacesAndSelfTo<TurnManager>().AsSingle();
+        Container.Bind<CommandQueue>().AsSingle();
     }
 }

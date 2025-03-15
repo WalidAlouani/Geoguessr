@@ -5,14 +5,6 @@ using Zenject;
 
 public class PlayerControllerAI : PlayerController
 {
-    private SignalBus _signalBus;
-
-    [Inject]
-    public void Construct(SignalBus signalBus)
-    {
-        _signalBus = signalBus;
-    }
-
     public override void TurnStarted()
     {
         base.TurnStarted();

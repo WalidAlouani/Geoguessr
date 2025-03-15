@@ -1,33 +1,94 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using Zenject;
+using System.Collections.Generic;
 
 public enum PlayerState { Idle, Moving }
 
 public class PlayerController : MonoBehaviour
 {
-    public BoardManager boardManager;
     [SerializeField] private PlayerVisual visual;
     [SerializeField] private PlayerAnimator _animation;
     [SerializeField] private float moveSpeed = 2f; // Speed for animation
 
     public int Index { get; private set; }
-    public string Name { get; private set; }
+    public int CurrentTileIndex { get; private set; }
+
 
     public event Action<PlayerState> OnStateChange;
     public event Action<int> OnTileReached;
     public event Action OnMoveComplete;
 
-    private PlayerState state;
-    private int currentTileIndex = 0;
+    protected Player _player;
+    protected PlayerState state;
+    protected SignalBus _signalBus;
 
-    public void Init(int index, PlayerData playerData)
+    [Inject]
+    public void Construct(SignalBus signalBus)
     {
-        Index = index;
-        Name = playerData.Name;
-        visual.Init(index);
+        _signalBus = signalBus;
+    }
+
+    public void Init(Player player)
+    {
+        _player = player;
+        Index = player.Index;
+        visual.Init(Index);
         _animation.Init();
         SetState(PlayerState.Idle);
+    }
+
+    public void MoveSteps(List<Vector3> steps)
+    {
+        _signalBus.Fire(new PlayerStartMoveSignal(this));
+
+        StopAllCoroutines();
+        StartCoroutine(MoveToTile(steps));
+    }
+
+    private IEnumerator MoveToTile(List<Vector3> steps)
+    {
+        SetState(PlayerState.Moving);
+        _animation.PlayLoopingRotation(false);
+
+        for (int i = 0; i < steps.Count; i++)
+        {
+            
+            Vector3 startPos = transform.position;
+            Vector3 endPos = steps[i];
+            float journey = 0f;
+            while (journey < 1f)
+            {
+                journey += Time.deltaTime * moveSpeed;
+                transform.position = Vector3.Lerp(startPos, endPos, journey);
+                _animation.UpdateMovingTime(journey);
+                yield return null;
+            }
+
+            CurrentTileIndex++;
+
+            _signalBus.Fire(new TileReachedSignal(_player, CurrentTileIndex));
+        }
+
+        SetState(PlayerState.Idle);
+        _animation.PlayLoopingRotation(true);
+
+        _signalBus.Fire(new TileStoppedSignal(_player, CurrentTileIndex));
+
+        OnMoveComplete?.Invoke();
+    }
+
+    public virtual void TurnStarted()
+    {
+        Debug.Log("Now it is player " + Index + "'s turn.");
+    }
+
+    public void Teleport(TileItem toTile)
+    {
+        transform.position = toTile.transform.position;
+        CurrentTileIndex = toTile.Index;
+        OnTileReached?.Invoke(CurrentTileIndex);
     }
 
     private void SetState(PlayerState state)
@@ -39,50 +100,4 @@ public class PlayerController : MonoBehaviour
         OnStateChange?.Invoke(state);
     }
 
-    public void MoveSteps(int steps)
-    {
-        int targetTileIndex = currentTileIndex + steps;
-
-        StopAllCoroutines();
-        StartCoroutine(MoveToTile(targetTileIndex));
-    }
-
-    private IEnumerator MoveToTile(int targetTileIndex)
-    {
-        SetState(PlayerState.Moving);
-        _animation.PlayLoopingRotation(false);
-
-        while (currentTileIndex < targetTileIndex)
-        {
-            int nextTileIndex = currentTileIndex + 1;
-            TileItem nextTile = boardManager.GetTile(nextTileIndex);
-            if (nextTile == null) break;
-
-            Vector3 startPos = transform.position;
-            Vector3 endPos = nextTile.transform.position;
-            float journey = 0f;
-            while (journey < 1f)
-            {
-                journey += Time.deltaTime * moveSpeed;
-                transform.position = Vector3.Lerp(startPos, endPos, journey);
-                _animation.UpdateMovingTime(journey);
-                yield return null;
-            }
-
-            OnTileReached?.Invoke(currentTileIndex);
-
-            nextTile.OnTileReached();// remove
-
-            currentTileIndex++;
-        }
-
-        OnMoveComplete?.Invoke();
-        SetState(PlayerState.Idle);
-        _animation.PlayLoopingRotation(true);
-    }
-
-    public virtual void TurnStarted()
-    {
-        Debug.Log("Now it is player " + Index + "'s turn.");
-    }
 }

@@ -1,8 +1,8 @@
-public class TurnEndedSignal
+public class PlayerCreatedSignal
 {
     public Player Player { get; private set; }
 
-    public TurnEndedSignal(Player player)
+    public PlayerCreatedSignal(Player player)
     {
         Player = player;
     }

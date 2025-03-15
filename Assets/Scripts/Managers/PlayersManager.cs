@@ -1,40 +1,37 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-
 
 public class PlayersManager : MonoBehaviour
 {
     [SerializeField] private List<PlayerData> playersData;
 
-    private BoardManager boardManager;
     private IPlayerFactory _playerFactory;
-    private List<PlayerController> players;
+    private SignalBus _signalBus;
+
+    private List<Player> players;
     private int currentPlayerIndex = 0;
 
+    public Player Current => players[currentPlayerIndex];
+
     [Inject]
-    public void Construct(IPlayerFactory playerFactory)
+    public void Construct(SignalBus signalBus, IPlayerFactory playerFactory)
     {
         _playerFactory = playerFactory;
+        _signalBus = signalBus;
     }
 
-    public void Init(BoardManager boardManager)
+    public void Init(Vector3 spawnPosition)
     {
-        this.boardManager = boardManager;
-        players = new List<PlayerController>();
+        players = new List<Player>();
 
-        var initialPosition = boardManager.GetHomeTilePosition();
         for (int i = 0; i < playersData.Count; i++)
         {
             var playerData = playersData[i];
-
-            var player = _playerFactory.Create(playerData, initialPosition, i);
-
-            // (Optionally, if BoardManager is not injected into PlayerController, set it here.)
-            player.boardManager = boardManager;
+            var player = new Player(i, playerData.Name, playerData.Type, 0, _signalBus);
+            player.Controller = _playerFactory.Create(player, spawnPosition);
             players.Add(player);
+            _signalBus.Fire(new PlayerCreatedSignal(player));
         }
     }
 
@@ -42,14 +39,4 @@ public class PlayersManager : MonoBehaviour
     {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
     }
-
-    public PlayerController Current => players[currentPlayerIndex];
-}
-
-public enum PlayerType { Humain, AI }
-[Serializable]
-public class PlayerData
-{
-    public string Name;
-    public PlayerType Type;
 }
