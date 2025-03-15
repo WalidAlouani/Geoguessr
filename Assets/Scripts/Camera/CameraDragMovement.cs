@@ -32,6 +32,7 @@ public class CameraDragMovement : MonoBehaviour
             targetPosition = boundaries.ClampToBounds(targetPosition);
         else
             targetPosition = Target.position + offset;
+
         transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
     }
 

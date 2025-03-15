@@ -43,7 +43,7 @@ public class CameraInputHandler : MonoBehaviour
             if (IntersectionUtility.RayPlaneIntersection(ray.origin, ray.direction, planePoint, planeNormal, out Vector3 currentIntersection))
             {
                 Vector3 worldDelta = dragOrigin - currentIntersection;
-                OnDragUpdateEvent?.Invoke(worldDelta); // Invoke the Drag Update Event with worldDelta
+                OnDragUpdateEvent?.Invoke(worldDelta);
                 dragOrigin = currentIntersection;
             }
         }
@@ -51,7 +51,7 @@ public class CameraInputHandler : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             isDragging = false;
-            OnDragEndEvent?.Invoke(); // Invoke the Drag End Event (if anyone is subscribed)
+            OnDragEndEvent?.Invoke();
         }
     }
 }

@@ -59,5 +59,7 @@ public class TurnManager : MonoBehaviour
         SubscribeToCurrentPlayer();
 
         playersManager.Current.TurnStarted();
+
+        _signalBus.Fire(new TurnStartedSignal(playersManager.Current));
     }
 }

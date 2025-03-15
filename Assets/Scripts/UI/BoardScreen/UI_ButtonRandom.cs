@@ -1,10 +1,9 @@
-using DG.Tweening;
-using System;
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using DG.Tweening;
+using TMPro;
 using Zenject;
 
 public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
@@ -14,11 +13,10 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] private TMP_Text text;
 
     private bool isInside = false;
-
     private WaitForSeconds wait = new WaitForSeconds(0.02f);
+    private SignalBus _signalBus;
 
     //subscribe to game state
-    private SignalBus _signalBus;
 
     [Inject]
     public void Construct(SignalBus signalBus)
@@ -29,11 +27,13 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private void OnEnable()
     {
         _signalBus.Subscribe<RollDiceSignal>(OnDiceRollRequested);
+        _signalBus.Subscribe<TurnStartedSignal>(OnTurnStarted);
     }
 
     private void OnDisable()
     {
         _signalBus.Unsubscribe<RollDiceSignal>(OnDiceRollRequested);
+        _signalBus.Unsubscribe<TurnStartedSignal>(OnTurnStarted);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -48,12 +48,10 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        _signalBus.Fire<RollDiceSignal>();
-    }
+        if (!button.interactable)
+            return;
 
-    public void OnDiceRollRequested()
-    {
-        StartCoroutine(ThrowDiceCoroutine());
+        _signalBus.Fire<RollDiceSignal>();
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -61,19 +59,36 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
         if (isInside)
             return;
 
-        image.DOFade(1, 0.15f);
-        text.gameObject.SetActive(false);
+        if (!button.interactable)
+            return;
+
+        SetState(true);
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (!button.interactable)
+            return;
+
         image.DOFade(0, 0.15f);
+    }
+
+    private void SetState(bool active)
+    {
+        image.DOFade(active ? 1 : 0, 0.15f);
+        text.gameObject.SetActive(!active);
+    }
+
+    private void OnDiceRollRequested()
+    {
+        StartCoroutine(ThrowDiceCoroutine());
     }
 
     private IEnumerator ThrowDiceCoroutine()
     {
-        //button.interactable = false;
-        text.gameObject.SetActive(true);
+        button.interactable = false;
+
+        SetState(false);
 
         for (int i = 0; i < 10; i++)
         {
@@ -81,9 +96,17 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
             yield return wait;
         }
 
-        var steps = UnityEngine.Random.Range(1, 11);
+        var steps = Random.Range(1, 11);
         text.text = steps.ToString();
 
         _signalBus.Fire(new DiceRolledSignal(steps));
+    }
+
+    private void OnTurnStarted(TurnStartedSignal signal)
+    {
+        SetState(true);
+
+        if (signal.Player is not PlayerControllerAI)
+            button.interactable = true;
     }
 }

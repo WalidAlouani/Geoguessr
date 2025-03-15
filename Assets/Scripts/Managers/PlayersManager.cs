@@ -2,17 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
 
 public class PlayersManager : MonoBehaviour
 {
     [SerializeField] private List<PlayerData> playersData;
-    [SerializeField] private PlayerController playerPrefab;
-    [SerializeField] private PlayerControllerAI playerAIPrefab;
 
     private BoardManager boardManager;
+    private IPlayerFactory _playerFactory;
     private List<PlayerController> players;
     private int currentPlayerIndex = 0;
+
+    [Inject]
+    public void Construct(IPlayerFactory playerFactory)
+    {
+        _playerFactory = playerFactory;
+    }
 
     public void Init(BoardManager boardManager)
     {
@@ -20,28 +26,14 @@ public class PlayersManager : MonoBehaviour
         players = new List<PlayerController>();
 
         var initialPosition = boardManager.GetHomeTilePosition();
-
         for (int i = 0; i < playersData.Count; i++)
         {
             var playerData = playersData[i];
-            PlayerController prefab;
 
-            switch (playerData.Type)
-            {
-                case PlayerType.Humain:
-                    prefab = playerPrefab;
-                    break;
-                case PlayerType.AI:
-                    prefab = playerAIPrefab;
-                    break;
-                default:
-                    prefab = playerPrefab;
-                    break;
-            }
+            var player = _playerFactory.Create(playerData, initialPosition, i);
 
-            var player = Instantiate(prefab, initialPosition, Quaternion.identity);
-            player.Init(i, playerData);
-            player.boardManager = boardManager; // hack remove later
+            // (Optionally, if BoardManager is not injected into PlayerController, set it here.)
+            player.boardManager = boardManager;
             players.Add(player);
         }
     }

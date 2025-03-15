@@ -200,8 +200,8 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: 1
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -6843,10 +6843,6 @@ MonoBehaviour:
     Type: 1
   - Name: Player4
     Type: 1
-  playerPrefab: {fileID: 3151441859500247785, guid: 3e7cb15866b2044c4821d261c3bfeeb2,
-    type: 3}
-  playerAIPrefab: {fileID: 3151441859500247785, guid: ae38b3bc37a5fb74fa5d73e08f5394ff,
-    type: 3}
 --- !u!1 &1884042184
 GameObject:
   m_ObjectHideFlags: 0
@@ -7118,6 +7114,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5b5165af5e200741beece5a22bdfdb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerPrefabMapping: {fileID: 11400000, guid: 32ccb342c7dfb6b438d872c81e765cc4,
+    type: 2}
 --- !u!114 &1926647039
 MonoBehaviour:
   m_ObjectHideFlags: 0

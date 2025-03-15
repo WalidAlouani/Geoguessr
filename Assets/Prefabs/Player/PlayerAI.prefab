@@ -141,6 +141,9 @@ MonoBehaviour:
   delayBetweenLoops: 7
   rotationAmount: {x: 0, y: 360, z: 0}
   rotationEase: 1
+  moveDuration: 0.25
+  moveValue: 0.5
+  moveEase: 1
 --- !u!1 &5517808263013071344
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,4 +191,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boardManager: {fileID: 0}
   visual: {fileID: 7616430128873330757}
+  _animation: {fileID: 5749786821036912761}
   moveSpeed: 4
