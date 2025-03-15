@@ -19,12 +19,26 @@ public class PlayersManager : MonoBehaviour
         this.boardManager = boardManager;
         players = new List<PlayerController>();
 
-        var initialPosition = boardManager.GetHomeTile().transform.position;
+        var initialPosition = boardManager.GetHomeTilePosition();
 
         for (int i = 0; i < playersData.Count; i++)
         {
             var playerData = playersData[i];
-            var prefab = playerData.Type == PlayerType.AI ? playerAIPrefab : playerPrefab;
+            PlayerController prefab;
+
+            switch (playerData.Type)
+            {
+                case PlayerType.Humain:
+                    prefab = playerPrefab;
+                    break;
+                case PlayerType.AI:
+                    prefab = playerAIPrefab;
+                    break;
+                default:
+                    prefab = playerPrefab;
+                    break;
+            }
+
             var player = Instantiate(prefab, initialPosition, Quaternion.identity);
             player.Init(i, playerData);
             player.boardManager = boardManager; // hack remove later

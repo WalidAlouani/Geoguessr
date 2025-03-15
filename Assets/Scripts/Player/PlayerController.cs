@@ -64,5 +64,6 @@ public class PlayerController : MonoBehaviour
 
     public virtual void TurnStarted()
     {
+        Debug.Log("Now it is player " + Index + "'s turn.");
     }
 }

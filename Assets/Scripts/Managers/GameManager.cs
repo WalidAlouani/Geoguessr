@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
         boardManager.Init(boardData.GetTiles());
         cameraBoundaries.Init(boardData.GetBoardCenter());
         playersManager.Init(boardManager);
-        turnManager.Init(playersManager);
+        turnManager.Init(playersManager, boardManager);
     }
 
 }

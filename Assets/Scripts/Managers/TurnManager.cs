@@ -1,32 +1,42 @@
 using UnityEngine;
-using System.Collections.Generic;
-using System;
-using System.Collections;
+using Zenject;
 
 public class TurnManager : MonoBehaviour
 {
     private PlayersManager playersManager;
+    private BoardManager boardManager;
 
-    public void Init(PlayersManager playersManager)
+    private SignalBus _signalBus;
+
+    [Inject]
+    public void Construct(SignalBus signalBus)
+    {
+        _signalBus = signalBus;
+    }
+
+    public void Init(PlayersManager playersManager, BoardManager boardManager)
     {
         this.playersManager = playersManager;
+        this.boardManager = boardManager;
 
         SubscribeToCurrentPlayer();
     }
 
     private void OnEnable()
     {
-        GameEvents.OnDiceRolled += OnDiceRolled;
+        _signalBus.Subscribe<DiceRolledSignal>(OnDiceRolled);
     }
 
     private void OnDisable()
     {
-        GameEvents.OnDiceRolled -= OnDiceRolled;
+        _signalBus.Unsubscribe<DiceRolledSignal>(OnDiceRolled);
     }
 
-    public void OnDiceRolled(int steps)
+    public void OnDiceRolled(DiceRolledSignal signal)
     {
+        var steps = signal.Steps;
         Debug.Log("Player " + playersManager.Current.Index + " rolls: " + steps);
+
         playersManager.Current.MoveSteps(steps);
     }
 
@@ -45,8 +55,6 @@ public class TurnManager : MonoBehaviour
         UnsubscribeFromCurrentPlayer();
 
         playersManager.NextPlayer();
-
-        Debug.Log("Now it is player " + playersManager.Current.Index + "'s turn.");
 
         SubscribeToCurrentPlayer();
 

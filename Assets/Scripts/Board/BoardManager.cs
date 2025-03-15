@@ -53,13 +53,18 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    public TileItem GetTile(int nextTileIndex)
+    public TileItem GetTile(int tileIndex)
     {
-        return tileItems[nextTileIndex % TilesCount];
+        return tileItems[tileIndex % TilesCount];
     }
 
-    public TileItem GetHomeTile()
+    public Vector3 GetTilePosition(int tileIndex)
     {
-        return GetTile(0);
+        return GetTile(tileIndex).transform.position;
+    }
+
+    public Vector3 GetHomeTilePosition()
+    {
+        return GetTilePosition(0);
     }
 }

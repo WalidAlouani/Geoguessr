@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Zenject;
 
 public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -17,15 +18,22 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private WaitForSeconds wait = new WaitForSeconds(0.02f);
 
     //subscribe to game state
+    private SignalBus _signalBus;
+
+    [Inject]
+    public void Construct(SignalBus signalBus)
+    {
+        _signalBus = signalBus;
+    }
 
     private void OnEnable()
     {
-        GameEvents.OnDiceRollRequested += ThrowDice;
+        _signalBus.Subscribe<RollDiceSignal>(OnDiceRollRequested);
     }
 
     private void OnDisable()
     {
-        GameEvents.OnDiceRollRequested -= ThrowDice;
+        _signalBus.Unsubscribe<RollDiceSignal>(OnDiceRollRequested);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -40,10 +48,10 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        GameEvents.RequestDiceRoll();
+        _signalBus.Fire<RollDiceSignal>();
     }
 
-    public void ThrowDice()
+    public void OnDiceRollRequested()
     {
         StartCoroutine(ThrowDiceCoroutine());
     }
@@ -76,6 +84,6 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
         var steps = UnityEngine.Random.Range(1, 11);
         text.text = steps.ToString();
 
-        GameEvents.DiceRolled(steps);
+        _signalBus.Fire(new DiceRolledSignal(steps));
     }
 }
