@@ -47,23 +47,6 @@ public class BoardManager : MonoBehaviour
 
             var tileItem = _tileFactory.CreateTile(tileData, position, transform);
             tileItem.Init(i);
-
-            switch (tileData.Type)
-            {
-                case TileType.Home:
-                    tileItem.SetEvent(null, new CoinRewardEvent(10000));
-                    break;
-                case TileType.Base:
-                    tileItem.SetEvent(new CoinRewardEvent(1000), null);
-                    break;
-                case TileType.Quiz:
-                    //tileItem.SetEvent(new CoinRewardEvent(100), null);
-                    break;
-                case TileType.QuizFlag:
-                    //tileItem.SetEvent(new CoinRewardEvent(100), null);
-                    break;
-            }
-
             tileItems.Add(tileItem);
         }
     }

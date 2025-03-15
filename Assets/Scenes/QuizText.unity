@@ -1238,7 +1238,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b10513120927a44e8b61a95bd4d3ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CountryCodes: {fileID: 11400000, guid: 3684fbd3ed40d054590fa944a237c374, type: 2}
   quizFile: {fileID: 4900000, guid: 952f70ada48f2445494217015362263b, type: 3}
   uI_QuizManager: {fileID: 1061662810}
 --- !u!4 &973865150
@@ -1253,7 +1252,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1061662809}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &984310158
@@ -1425,7 +1425,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &1023471744
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1704,7 +1704,7 @@ RectTransform:
   m_Children:
   - {fileID: 1159478441}
   - {fileID: 1047491042}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 973865150}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3317,7 +3317,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1876510471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3987,5 +3987,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 1023471746}
   - {fileID: 973865150}
-  - {fileID: 1061662809}
   - {fileID: 1876510473}

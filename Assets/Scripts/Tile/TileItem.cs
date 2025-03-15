@@ -7,19 +7,13 @@ public class TileItem : MonoBehaviour
 
     public int Index { get; private set; }
 
-    public ITileEvent OnStopEvent;
-    public ITileEvent OnReachEvent;
+    public TileEvent OnStopEvent;
+    public TileEvent OnReachEvent;
 
     public void Init(int index)
     {
         Index = index;
         _animation.PlayStartAnimation(index);
-    }
-
-    public void SetEvent(ITileEvent stopEvent, ITileEvent reachEvent)
-    {
-        OnStopEvent = stopEvent;
-        OnReachEvent = reachEvent;
     }
 
     public void TriggerOnStopEvent(Player player, Action onEventComplete)

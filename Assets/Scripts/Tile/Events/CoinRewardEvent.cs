@@ -1,16 +1,12 @@
 using UnityEngine;
 using System;
 
-public class CoinRewardEvent : ITileEvent
+[CreateAssetMenu(fileName = "CoinEvent", menuName = "ScriptableObjects/Tile Events/Coin Event")]
+public class CoinRewardEvent : TileEvent
 {
-    private int coinAmount;
+    public int coinAmount = 1000;
 
-    public CoinRewardEvent(int amount)
-    {
-        coinAmount = amount;
-    }
-
-    public void Execute(Player player, Action onEventComplete)
+    public override void Execute(Player player, Action onEventComplete)
     {
         player.AddCoins(coinAmount);
         Debug.Log($"{player.Name} received {coinAmount} coins.");

@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/QuizFlag.unity
     guid: edc11a9786f317f45af1f0c840829b3c
+  - enabled: 1
+    path: Assets/Scenes/QuizText.unity
+    guid: d86f02f8a26b738489e40ecace531ad5
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 17b37aa98823b5c4e88662a6d1fe7757,
       type: 2}

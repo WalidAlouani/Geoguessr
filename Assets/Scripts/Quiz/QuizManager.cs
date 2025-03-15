@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class QuizManager : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class QuizManager : MonoBehaviour
     {
         QuizFinished?.Invoke();
         Debug.Log("Exit");
+        SceneManager.UnloadSceneAsync("QuizText");
     }
 
     private void OnDestroy()

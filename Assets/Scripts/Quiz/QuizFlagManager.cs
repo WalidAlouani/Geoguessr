@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class QuizFlagManager : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class QuizFlagManager : MonoBehaviour
     {
         QuizFinished?.Invoke();
         Debug.Log("Exit");
+        SceneManager.UnloadSceneAsync("QuizFlag");
     }
 
     private void OnDestroy()

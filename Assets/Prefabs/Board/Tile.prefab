@@ -188,3 +188,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animation: {fileID: 7834527359995008003}
+  OnStopEvent: {fileID: 11400000, guid: bd877ae464d417e4392c11970e99c79d, type: 2}
+  OnReachEvent: {fileID: 0}

@@ -1,17 +1,14 @@
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
-public class QuizEvent : ITileEvent
+[CreateAssetMenu(fileName = "QuizEvent", menuName = "ScriptableObjects/Tile Events/Quiz Event")]
+public class QuizEvent : TileEvent
 {
-    //private QuizUI quizUI;
+    public string sceneName;
 
-    //public QuizEvent(QuizUI quizUI)
-    //{
-    //    this.quizUI = quizUI;
-    //}
-
-    public void Execute(Player player, Action onEventComplete)
+    public override void Execute(Player player, Action onEventComplete)
     {
-        //quizUI.ShowQuizForPlayer(player, onEventComplete);
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
     }
 }
