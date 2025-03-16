@@ -11,7 +11,6 @@ public class QuizCommand : ICommand
         SceneName = sceneName;
     }
 
-
     public void Execute()
     {
         SceneLoader.Instance.LoadScene(SceneName, LoadSceneMode.Additive);

@@ -21,6 +21,7 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         Container.DeclareSignal<TileReachedSignal>();
         Container.DeclareSignal<TileStoppedSignal>();
 
+        Container.DeclareSignal<CoinsAddedSignal>();
         Container.DeclareSignal<CoinsUpdateSignal>();
 
         Container.DeclareSignal<QuizRequestedSignal>();

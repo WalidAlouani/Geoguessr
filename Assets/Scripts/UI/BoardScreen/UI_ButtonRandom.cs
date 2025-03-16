@@ -16,8 +16,6 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private WaitForSeconds wait = new WaitForSeconds(0.02f);
     private SignalBus _signalBus;
 
-    //subscribe to game state
-
     [Inject]
     public void Construct(SignalBus signalBus)
     {

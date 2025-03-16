@@ -90,44 +90,44 @@ MonoBehaviour:
       Y: 5
     Type: 1
   - Position:
-      X: -4
-      Y: 5
+      X: -3
+      Y: 6
     Type: 1
   - Position:
-      X: -4
-      Y: 6
+      X: -3
+      Y: 7
     Type: 3
   - Position:
+      X: -4
+      Y: 7
+    Type: 1
+  - Position:
+      X: -5
+      Y: 7
+    Type: 1
+  - Position:
       X: -5
       Y: 6
-    Type: 1
+    Type: 2
   - Position:
       X: -6
       Y: 6
     Type: 1
   - Position:
-      X: -6
-      Y: 7
-    Type: 2
+      X: -7
+      Y: 6
+    Type: 1
   - Position:
       X: -7
       Y: 7
-    Type: 1
-  - Position:
-      X: -8
-      Y: 7
-    Type: 1
-  - Position:
-      X: -8
-      Y: 8
     Type: 1
   - Position:
       X: -7
       Y: 8
     Type: 1
   - Position:
-      X: -6
-      Y: 8
+      X: -7
+      Y: 9
     Type: 1
   - Position:
       X: -6
@@ -146,16 +146,16 @@ MonoBehaviour:
       Y: 9
     Type: 2
   - Position:
-      X: -3
-      Y: 8
-    Type: 1
-  - Position:
       X: -2
-      Y: 8
+      Y: 9
     Type: 1
   - Position:
       X: -1
-      Y: 8
+      Y: 9
+    Type: 1
+  - Position:
+      X: 0
+      Y: 9
     Type: 1
   - Position:
       X: 0
@@ -166,8 +166,8 @@ MonoBehaviour:
       Y: 7
     Type: 1
   - Position:
-      X: 1
-      Y: 7
+      X: 0
+      Y: 6
     Type: 3
   - Position:
       X: 1
@@ -178,16 +178,16 @@ MonoBehaviour:
       Y: 5
     Type: 1
   - Position:
-      X: 0
-      Y: 5
+      X: 1
+      Y: 4
     Type: 1
   - Position:
       X: 0
       Y: 4
     Type: 2
   - Position:
-      X: 0
-      Y: 3
+      X: -1
+      Y: 4
     Type: 1
   - Position:
       X: -1
@@ -205,4 +205,4 @@ MonoBehaviour:
       X: 0
       Y: 1
     Type: 1
-  BoardCenter: {x: -3.5, y: 4.5}
+  BoardCenter: {x: -3, y: 4.5}

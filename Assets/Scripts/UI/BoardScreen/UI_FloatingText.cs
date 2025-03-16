@@ -1,13 +1,16 @@
 using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using TMPro;
 using UnityEngine;
 
-public class UI_FloatingText : MonoBehaviour
+public class UI_FloatingText : MonoBehaviour, IPoolable
 {
     [SerializeField] private Canvas canvas;
     [SerializeField] private TMP_Text text;
+    private Sequence moveSequence;
+    private Vector3 initialPosition;
+
+    public Action<IPoolable> Return { get; set; }
 
     private void Awake()
     {
@@ -21,8 +24,6 @@ public class UI_FloatingText : MonoBehaviour
         text.color = value >= 0 ? Color.blue : Color.red;
 
         CreateMovingSequence();
-
-        Destroy(gameObject, 2);
     }
 
     private void LateUpdate()
@@ -32,16 +33,28 @@ public class UI_FloatingText : MonoBehaviour
 
     private void CreateMovingSequence()
     {
-        var moveSequence = DOTween.Sequence();
+        moveSequence = DOTween.Sequence();
 
         text.transform.localScale = new Vector3(1, 0, 1);
-        var initialPosition = text.transform.localPosition;
+        initialPosition = text.transform.localPosition;
 
         moveSequence.Append(text.transform.DOScaleY(1, 0.1f).SetEase(Ease.Linear));
         moveSequence.Append(text.transform.DOLocalMoveY(initialPosition.y + 25, 0.25f).SetEase(Ease.Linear));
 
         moveSequence.Append(text.DOFade(0, 0.15f).SetEase(Ease.Linear).SetDelay(1));
 
+        moveSequence.OnComplete(() => Return?.Invoke(this));
+
         moveSequence.Play();
+    }
+
+    public void OnCreate()
+    {
+    }
+
+    public void OnRelease()
+    {
+        text.DOFade(1, 0);
+        text.transform.localPosition = initialPosition;
     }
 }
