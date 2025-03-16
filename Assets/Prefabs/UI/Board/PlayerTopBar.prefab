@@ -445,6 +445,7 @@ GameObject:
   - component: {fileID: 7655131621406030586}
   - component: {fileID: 5325575212465991702}
   - component: {fileID: 212159051581703366}
+  - component: {fileID: 4238090301250419862}
   m_Layer: 5
   m_Name: Base
   m_TagString: Untagged
@@ -509,6 +510,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4238090301250419862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4232045047092177999}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
+  m_EffectDistance: {x: 20, y: 20}
+  m_UseGraphicAlpha: 0
 --- !u!1 &8822072155653012837
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,4 +655,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ce5df42dba562044a93654800c74fbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSetup: {fileID: 11400000, guid: 25538ea982c6f934a9d9792f4aa02f68, type: 2}
   coinText: {fileID: 6098520573282596974}
+  outline: {fileID: 4238090301250419862}

@@ -1,11 +1,7 @@
 using DG.Tweening;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using Zenject;
-using Zenject.SpaceFighter;
 
 public class UI_BoardManager : MonoBehaviour
 {
@@ -27,24 +23,27 @@ public class UI_BoardManager : MonoBehaviour
 
     private void OnEnable()
     {
-        _signalBus.Subscribe<PlayerCreatedSignal>(OnPlayerCreated);
+        _signalBus.Subscribe<PlayersCreatedSignal>(OnPlayersCreated);
         _signalBus.Subscribe<TurnStartedSignal>(OnTurnedChanged);
         _signalBus.Subscribe<CoinsUpdateSignal>(OnCoinsUpdated);
     }
 
     private void OnDisable()
     {
-        _signalBus.Unsubscribe<PlayerCreatedSignal>(OnPlayerCreated);
+        _signalBus.Unsubscribe<PlayersCreatedSignal>(OnPlayersCreated);
         _signalBus.Unsubscribe<TurnStartedSignal>(OnTurnedChanged);
         _signalBus.Unsubscribe<CoinsUpdateSignal>(OnCoinsUpdated);
     }
 
-    private void OnPlayerCreated(PlayerCreatedSignal signal)
+    private void OnPlayersCreated(PlayersCreatedSignal signal)
     {
-        var newIndex = signal.Player.Index;
-        var playerUI = Instantiate(playerTopBarPrefab, spawnParent);
-        playerUI.transform.localPosition = newIndex == 0 ? Vector3.zero : Vector3.up * 1000;
-        playersUI[newIndex] = playerUI;
+        for (int i = 0; i < signal.Players.Count; i++)
+        {
+            var newIndex = signal.Players[i].Index;
+            var playerUI = Instantiate(playerTopBarPrefab, spawnParent);
+            playerUI.Init(newIndex, signal.Players.Count > 1);
+            playersUI[newIndex] = playerUI;
+        }
     }
 
     private void OnTurnedChanged(TurnStartedSignal signal)
@@ -55,10 +54,10 @@ public class UI_BoardManager : MonoBehaviour
 
         if (playersUI.TryGetValue(current, out var playerUI))
         {
-            playerUI.transform.DOLocalMoveY(1000, 0.3f).SetDelay(1.5f);
+            playerUI.transform.DOLocalMoveY(1000, 0.3f).SetDelay(0.5f);
         }
         current = newIndex;
-        playersUI[current].transform.DOLocalMoveY(0, 0.3f).SetDelay(1.5f);
+        playersUI[current].transform.DOLocalMoveY(0, 0.3f).SetDelay(0.5f);
     }
 
     private void OnCoinsUpdated(CoinsUpdateSignal signal)

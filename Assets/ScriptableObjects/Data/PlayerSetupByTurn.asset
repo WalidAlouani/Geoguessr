@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fe61bd6d9ea0d543b283cca9b688b49, type: 3}
+  m_Name: PlayerSetupByTurn
+  m_EditorClassIdentifier: 
+  entries:
+  - material: {fileID: 2100000, guid: b4643ca30f13a48e4a01b06101b2fe0a, type: 2}
+    color: {r: 0.91372555, g: 0.19607845, b: 0.21960786, a: 1}
+  - material: {fileID: 2100000, guid: 7e6fc180c909c5744b6d2baa41a45efe, type: 2}
+    color: {r: 0, g: 0.6392157, b: 0.9176471, a: 1}
+  - material: {fileID: 2100000, guid: b61cbd55842ed97489b31e0560441a99, type: 2}
+    color: {r: 0, g: 1, b: 0, a: 1}
+  - material: {fileID: 2100000, guid: c87b41f0cf5d6aa4882b35648f93ac88, type: 2}
+    color: {r: 1, g: 1, b: 0, a: 1}

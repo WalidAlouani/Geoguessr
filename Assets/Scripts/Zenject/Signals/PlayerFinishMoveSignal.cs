@@ -1,8 +1,8 @@
-public class PlayerStartMoveSignal
+public class PlayerFinishMoveSignal
 {
     public Player Player { get; private set; }
 
-    public PlayerStartMoveSignal(Player player)
+    public PlayerFinishMoveSignal(Player player)
     {
         Player = player;
     }

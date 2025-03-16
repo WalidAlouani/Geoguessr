@@ -31,8 +31,8 @@ public class PlayersManager : MonoBehaviour
             var player = new Player(i, playerData.Name, playerData.Type, 0, _signalBus);
             player.Controller = _playerFactory.Create(player, spawnPosition);
             players.Add(player);
-            _signalBus.Fire(new PlayerCreatedSignal(player));
         }
+        _signalBus.Fire(new PlayersCreatedSignal(players));
     }
 
     public void NextPlayer()

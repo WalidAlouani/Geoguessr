@@ -7,13 +7,11 @@ public class TurnManager : MonoBehaviour
     private BoardManager boardManager;
 
     private SignalBus _signalBus;
-    private CommandQueue _commandQueue;
 
     [Inject]
-    public void Construct(SignalBus signalBus, CommandQueue commandQueue)
+    public void Construct(SignalBus signalBus)
     {
         _signalBus = signalBus;
-        _commandQueue = commandQueue;
     }
 
     public void Init(PlayersManager playersManager, BoardManager boardManager)
@@ -38,24 +36,18 @@ public class TurnManager : MonoBehaviour
 
     public void OnDiceRolled(DiceRolledSignal signal)
     {
-        var steps = signal.Steps;
-        Debug.Log("Player " + playersManager.Current.Index + " rolls: " + steps);
-
-        var currentTileIndex = playersManager.Current.Controller.CurrentTileIndex;
-        var tiles = boardManager.GetTiles(currentTileIndex, steps);
-
-        ICommand moveCommand = new MoveCommand(playersManager.Current, tiles, _commandQueue);
-        _commandQueue.EnqueueCommand(moveCommand);
+        var tiles = boardManager.GetTiles(playersManager.Current.Index, signal.Steps);
+        playersManager.Current.Move(tiles);
     }
 
     private void SubscribeToCurrentPlayer()
     {
-        playersManager.Current.Controller.OnMoveComplete += OnPlayerMoveComplete;
+        _signalBus.Subscribe<PlayerFinishMoveSignal>(OnPlayerMoveComplete);
     }
 
     private void UnsubscribeFromCurrentPlayer()
     {
-        playersManager.Current.Controller.OnMoveComplete -= OnPlayerMoveComplete;
+        _signalBus.Unsubscribe<PlayerFinishMoveSignal>(OnPlayerMoveComplete);
     }
 
     private void OnPlayerMoveComplete()

@@ -11,6 +11,7 @@ public class BoardManager : MonoBehaviour
 
     private SignalBus _signalBus;
     private ITileFactory _tileFactory;
+    private List<int> _positions = new List<int>();
 
     [Inject]
     public void Construct(ITileFactory tileFactory, SignalBus signalBus)
@@ -29,12 +30,14 @@ public class BoardManager : MonoBehaviour
     {
         _signalBus.Subscribe<TileReachedSignal>(OnTileReached);
         _signalBus.Subscribe<TileStoppedSignal>(OnTileStopped);
+        _signalBus.Subscribe<PlayersCreatedSignal>(OnPlayersCreated);
     }
 
     private void OnDisable()
     {
         _signalBus.Unsubscribe<TileReachedSignal>(OnTileReached);
         _signalBus.Unsubscribe<TileStoppedSignal>(OnTileStopped);
+        _signalBus.Unsubscribe<PlayersCreatedSignal>(OnPlayersCreated);
     }
 
     private void CreateBoard(List<TileData> tileDatas)
@@ -66,8 +69,10 @@ public class BoardManager : MonoBehaviour
         return GetTilePosition(0);
     }
 
-    public List<Vector3> GetTiles(int currentTileIndex, int steps)
+    public List<Vector3> GetTiles(int playerIndex, int steps)
     {
+        var currentTileIndex = _positions[playerIndex];
+
         List<Vector3> tiles = new List<Vector3>();
         int targetTileIndex = currentTileIndex + steps;
         while (currentTileIndex < targetTileIndex)
@@ -88,5 +93,14 @@ public class BoardManager : MonoBehaviour
     private void OnTileStopped(TileStoppedSignal signal)
     {
         GetTile(signal.TileIndex).TriggerOnStopEvent(signal.Player, null);
+        _positions[signal.Player.Index] = signal.TileIndex;
+    }
+
+    private void OnPlayersCreated(PlayersCreatedSignal signal)
+    {
+        for (int i = 0; i < signal.Players.Count; i++)
+        {
+            _positions.Add(0);
+        }
     }
 }

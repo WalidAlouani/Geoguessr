@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: CoinEvent10000
   m_EditorClassIdentifier: 
   coinAmount: 10000
+  floatingText: {fileID: 4624694140376051671, guid: e863ee1c32792924f862689067942d14,
+    type: 3}

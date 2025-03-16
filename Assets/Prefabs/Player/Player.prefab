@@ -120,11 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _renderer: {fileID: 7450095727243652931}
-  materials:
-  - {fileID: 2100000, guid: b4643ca30f13a48e4a01b06101b2fe0a, type: 2}
-  - {fileID: 2100000, guid: 7e6fc180c909c5744b6d2baa41a45efe, type: 2}
-  - {fileID: 2100000, guid: b61cbd55842ed97489b31e0560441a99, type: 2}
-  - {fileID: 2100000, guid: c87b41f0cf5d6aa4882b35648f93ac88, type: 2}
+  setup: {fileID: 11400000, guid: 25538ea982c6f934a9d9792f4aa02f68, type: 2}
 --- !u!114 &5749786821036912761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +137,8 @@ MonoBehaviour:
   delayBetweenLoops: 7
   rotationAmount: {x: 0, y: 360, z: 0}
   rotationEase: 1
+  scaleDuration: 0.55
+  scaleValue: 1.2
   moveDuration: 0.25
   moveValue: 0.5
   moveEase: 1
@@ -189,7 +187,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52e658cd5f01a6247a453910a0cc916d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardManager: {fileID: 0}
   visual: {fileID: 7616430128873330757}
   _animation: {fileID: 5749786821036912761}
   moveSpeed: 4

@@ -11,7 +11,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TurnManager turnManager;
     [SerializeField] private CameraBoundaries cameraBoundaries;
 
-
     private void Start()
     {
         boardManager.Init(boardData.GetTiles());
@@ -19,5 +18,4 @@ public class GameManager : MonoBehaviour
         playersManager.Init(boardManager.GetHomeTilePosition());
         turnManager.Init(playersManager, boardManager);
     }
-
 }

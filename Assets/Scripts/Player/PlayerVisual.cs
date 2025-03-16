@@ -5,10 +5,10 @@ using UnityEngine;
 public class PlayerVisual : MonoBehaviour
 {
     [SerializeField] private MeshRenderer _renderer;
-    [SerializeField] private Material[] materials;
+    [SerializeField] private PlayerSetupByTurn setup;
 
     public void Init(int i)
     {
-        _renderer.material = materials[i];
+        _renderer.material = setup.entries[i].material;
     }
 }

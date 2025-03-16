@@ -1,9 +1,11 @@
-public class PlayerCreatedSignal
-{
-    public Player Player { get; private set; }
+using System.Collections.Generic;
 
-    public PlayerCreatedSignal(Player player)
+public class PlayersCreatedSignal
+{
+    public List<Player> Players { get; private set; }
+
+    public PlayersCreatedSignal(List<Player> players)
     {
-        Player = player;
+        Players = players;
     }
 }

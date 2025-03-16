@@ -41,8 +41,6 @@ public class PlayerController : MonoBehaviour
 
     public void MoveSteps(List<Vector3> steps)
     {
-        _signalBus.Fire(new PlayerStartMoveSignal(this));
-
         StopAllCoroutines();
         StartCoroutine(MoveToTile(steps));
     }

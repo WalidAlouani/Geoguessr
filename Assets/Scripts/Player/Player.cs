@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 public class Player
@@ -10,12 +12,7 @@ public class Player
     public int Coins { get; private set; }
 
     private SignalBus _signalBus;
-
-    [Inject]
-    public void Construct(SignalBus signalBus)
-    {
-        _signalBus = signalBus;
-    }
+    private CommandQueue _commandQueue;
 
     public Player(int index, string name, PlayerType type, int coins, SignalBus signalBus)
     {
@@ -24,6 +21,7 @@ public class Player
         Type = type;
         Coins = coins;
         _signalBus = signalBus;
+        _commandQueue = new CommandQueue();
     }
 
     public void TurnStarted()
@@ -39,5 +37,19 @@ public class Player
     {
         Coins += coinAmount;
         _signalBus.Fire(new CoinsUpdateSignal(this));
+    }
+
+    public void Move(List<Vector3> tiles)
+    {
+        _signalBus.Fire(new PlayerStartMoveSignal(this));
+
+        ICommand waitCommand = new WaitCommand(this, 1, _commandQueue);
+        _commandQueue.EnqueueCommand(waitCommand);
+
+        ICommand moveCommand = new MoveCommand(this, tiles, _commandQueue);
+        _commandQueue.EnqueueCommand(moveCommand);
+
+        waitCommand = new WaitCommand(this, 1, _commandQueue, ()=> _signalBus.Fire(new PlayerFinishMoveSignal(this))); 
+        _commandQueue.EnqueueCommand(waitCommand);
     }
 }

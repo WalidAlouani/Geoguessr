@@ -34,7 +34,7 @@ public class CameraMovement : MonoBehaviour
 
     private void OnTurnStarted(PlayerStartMoveSignal signal)
     {
-        Target = signal.Player.transform;
+        Target = signal.Player.Controller.transform;
     }
 
     private void OnTurnEnded(TurnEndedSignal signal)

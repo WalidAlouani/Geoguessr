@@ -18,11 +18,12 @@ public class TileItem : MonoBehaviour
 
     public void TriggerOnStopEvent(Player player, Action onEventComplete)
     {
-        OnStopEvent?.Execute(player, onEventComplete);
+        OnStopEvent?.Execute(this, player, onEventComplete);
     }
 
     public void TriggerOnReachEvent(Player player, Action onEventComplete)
     {
-        OnReachEvent?.Execute(player, onEventComplete);
+        _animation.PlayStepOnAnimation();
+        OnReachEvent?.Execute(this, player, onEventComplete);
     }
 }
