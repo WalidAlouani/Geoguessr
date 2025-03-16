@@ -11,40 +11,7 @@ public class CountryCodes : ScriptableObject, ICountryCodeLookup
 
     private void OnEnable()
     {
-        InitializeDictionary();
-    }
-
-    private void InitializeDictionary()
-    {
-        countryCodeDictionary = new Dictionary<string, string>();
-
-        try
-        {
-            countryCodeDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonFile.text);
-
-            if (countryCodeDictionary != null)
-            {
-                // Convert all keys to lowercase for case-insensitive lookup
-                Dictionary<string, string> lowercaseDict = new Dictionary<string, string>();
-                foreach (var kvp in countryCodeDictionary)
-                {
-                    lowercaseDict[kvp.Key.ToLower()] = kvp.Value;
-                }
-                countryCodeDictionary = lowercaseDict;
-            }
-            else
-            {
-                Debug.LogError("Failed to deserialize JSON: countryCodeDictionary is null.");
-            }
-        }
-        catch (JsonException ex)
-        {
-            Debug.LogError($"Error deserializing JSON: {ex.Message}");
-        }
-        catch (System.Exception ex)
-        {
-            Debug.LogError($"An unexpected error occured: {ex.Message}");
-        }
+        countryCodeDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonFile.text);
     }
 
     public string GetCountryName(string countryCode)

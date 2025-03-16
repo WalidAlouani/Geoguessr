@@ -17,7 +17,6 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         Container.DeclareSignal<TurnEndedSignal>();
 
         Container.DeclareSignal<PlayerStartMoveSignal>();
-        Container.DeclareSignal<PlayerFinishMoveSignal>();
 
         Container.DeclareSignal<TileReachedSignal>();
         Container.DeclareSignal<TileStoppedSignal>();

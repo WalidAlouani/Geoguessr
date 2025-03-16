@@ -61,7 +61,7 @@ public class TurnManager : MonoBehaviour
     {
         var player = playersManager.Current;
 
-        var quizCommand = new QuizCommand(signal.QuizType);
+        var quizCommand = new QuizCommand(signal.QuizType, signal.SceneName);
         _commandQueue.EnqueueCommand(quizCommand);
 
         var waitCommand = new WaitCommand(player, 1, _commandQueue);

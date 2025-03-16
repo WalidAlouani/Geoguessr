@@ -912,7 +912,6 @@ GameObject:
   m_Component:
   - component: {fileID: 973865150}
   - component: {fileID: 973865151}
-  - component: {fileID: 973865152}
   m_Layer: 0
   m_Name: QuizManager
   m_TagString: Untagged
@@ -948,23 +947,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cdbcde7eaa6ab84f82a16544e20220d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  picker: {fileID: 973865152}
-  CountryCodes: {fileID: 11400000, guid: 3684fbd3ed40d054590fa944a237c374, type: 2}
-  uI_QuizManager: {fileID: 1061662810}
---- !u!114 &973865152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 973865148}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0b6f6eb52b68e442bb57ccbedaf1015, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
   jsonLabel:
     m_LabelString: FlagQuiz
+  CountryCodes: {fileID: 11400000, guid: 3684fbd3ed40d054590fa944a237c374, type: 2}
+  uI_QuizManager: {fileID: 1061662810}
 --- !u!1 &984310158
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,7 +985,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.09660417, y: 0.14675125}
   m_AnchorMax: {x: 0.42714578, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.71798706}
+  m_AnchoredPosition: {x: 0, y: -0.7180176}
   m_SizeDelta: {x: 1.5095978, y: 1.4356995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &984310160
@@ -1827,7 +1813,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.7172188}
   m_AnchorMax: {x: 1, y: 0.93765634}
-  m_AnchoredPosition: {x: 0.50024414, y: -1.1394043}
+  m_AnchoredPosition: {x: 0.50024414, y: -1.1391602}
   m_SizeDelta: {x: 0, y: 3.0813007}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1272954158

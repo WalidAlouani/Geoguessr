@@ -1,18 +1,17 @@
-using Newtonsoft.Json;
-using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using Zenject;
 
 public class QuizFlagManager : MonoBehaviour
 {
-    public RandomResourceKeyPicker picker;
-    public CountryCodes CountryCodes;
-    public UI_QuizManagerFlag uI_QuizManager;
-    public event Action QuizFinished;
+    [SerializeField] private AssetLabelReference jsonLabel;
 
-    private TextAsset quizFile;
-    private IAssetLoader assetLoader;
+    [SerializeField] private UI_QuizManagerFlag uI_QuizManager;
+    [SerializeField] private CountryCodes CountryCodes;
+
+    private RandomResourceKeyPicker picker = new RandomResourceKeyPicker();
+    private IAssetLoader assetLoader = new AddressableLoader();
 
     private SignalBus _signalBus;
 
@@ -24,15 +23,11 @@ public class QuizFlagManager : MonoBehaviour
 
     async void Start()
     {
-        var res = await picker.GetRandomResourceKeyAsync();
+        var res = await RandomResourceKeyPicker.GetRandomResourceKeyAsync(jsonLabel);
 
-        Debug.Log(res);
+        var quizFile = await assetLoader.LoadAssetAsync<TextAsset>(res);
 
-        assetLoader = new AddressableLoader();
-
-        quizFile = await assetLoader.LoadAssetAsync<TextAsset>(res);
-
-        var quizData = JsonConvert.DeserializeObject<QuizData>(quizFile.text);
+        var quizData = QuizSerializerJson.LoadFromJson(quizFile.text);
 
         var quiz = await FlagQuiz.CreateAsync(quizData, assetLoader, CountryCodes);
 
@@ -42,9 +37,7 @@ public class QuizFlagManager : MonoBehaviour
     public void OnQuizFinished()
     {
         _signalBus.Fire<QuizFinishedSignal>();
-        QuizFinished?.Invoke();
-        Debug.Log("Exit");
-        SceneManager.UnloadSceneAsync("QuizFlag");
+        SceneLoader.Instance.UnloadScene(gameObject.scene.name);
     }
 
     private void OnDestroy()

@@ -14,14 +14,11 @@ public class CameraBoundaries : MonoBehaviour
 
     public Vector3 ClampToBounds(Vector3 worldPos)
     {
-        // Convert this offset into the object's local space.
         Vector3 localOffset = transform.InverseTransformVector(worldPos);
 
-        // Clamp the x and y components.
         localOffset.x = Mathf.Clamp(localOffset.x, BoundsX.x, BoundsX.y);
         localOffset.z = Mathf.Clamp(localOffset.z, BoundsZ.x, BoundsZ.y);
 
-        // Convert the clamped local offset back to world space.
         Vector3 clampedOffset = transform.TransformVector(localOffset);
         return new Vector3(clampedOffset.x, worldPos.y, clampedOffset.z);
     }

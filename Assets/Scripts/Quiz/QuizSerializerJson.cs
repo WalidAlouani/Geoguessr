@@ -24,4 +24,9 @@ public class QuizSerializerJson : IDataSerializer<QuizData>
         string json = File.ReadAllText(path);
         return JsonConvert.DeserializeObject<QuizData>(json);
     }
+
+    public static QuizData LoadFromJson(string json)
+    {
+        return JsonConvert.DeserializeObject<QuizData>(json);
+    }
 }

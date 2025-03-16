@@ -9,6 +9,6 @@ public class QuizEvent : TileEvent
 
     public override void Execute(TileItem tile, Player player, SignalBus signalBus)
     {
-        signalBus.Fire(new QuizRequestedSignal(player, tile, quizType));
+        signalBus.Fire(new QuizRequestedSignal(player, tile, quizType, sceneName));
     }
 }

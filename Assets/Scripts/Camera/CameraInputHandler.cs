@@ -7,7 +7,6 @@ public class CameraInputHandler : MonoBehaviour
     private Vector3 dragOrigin;
     private bool isDragging = false;
 
-    // Define events for drag actions
     public event Action OnDragStartEvent;
     public event Action<Vector3> OnDragUpdateEvent;
     public event Action OnDragEndEvent;
@@ -31,7 +30,7 @@ public class CameraInputHandler : MonoBehaviour
             {
                 dragOrigin = intersection;
                 isDragging = true;
-                OnDragStartEvent?.Invoke(); // Invoke the Drag Start Event (if anyone is subscribed)
+                OnDragStartEvent?.Invoke();
             }
         }
 

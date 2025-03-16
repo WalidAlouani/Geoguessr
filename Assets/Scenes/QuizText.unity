@@ -1238,7 +1238,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b10513120927a44e8b61a95bd4d3ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quizFile: {fileID: 4900000, guid: 952f70ada48f2445494217015362263b, type: 3}
+  jsonLabel:
+    m_LabelString: TextQuiz
   uI_QuizManager: {fileID: 1061662810}
 --- !u!4 &973865150
 Transform:

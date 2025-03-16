@@ -5,17 +5,10 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 
-public class RandomResourceKeyPicker : MonoBehaviour
+public class RandomResourceKeyPicker
 {
-    [Tooltip("Label for the JSON files in Addressables.")]
-    public AssetLabelReference jsonLabel;
-
-    /// <summary>
-    /// Asynchronously gets a random resource key from the Addressables group identified by jsonLabel.
-    /// </summary>
-    public async Task<string> GetRandomResourceKeyAsync()
+    public static async Task<string> GetRandomResourceKeyAsync(AssetLabelReference jsonLabel)
     {
-        // Load all resource locations with the given label.
         AsyncOperationHandle<IList<IResourceLocation>> locationsHandle = Addressables.LoadResourceLocationsAsync(jsonLabel);
         await locationsHandle.Task;
 
@@ -33,17 +26,9 @@ public class RandomResourceKeyPicker : MonoBehaviour
             return null;
         }
 
-        // Pick a random location and return its PrimaryKey.
         int randomIndex = Random.Range(0, locations.Count);
         string resourceKey = locations[randomIndex].PrimaryKey;
         Addressables.Release(locationsHandle);
         return resourceKey;
-    }
-
-    // For testing, you can call this in Start.
-    async void Start()
-    {
-        string randomKey = await GetRandomResourceKeyAsync();
-        Debug.Log("Random resource key: " + randomKey);
     }
 }
