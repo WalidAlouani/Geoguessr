@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Zenject;
 
 public class TileItem : MonoBehaviour
 {
@@ -10,20 +11,28 @@ public class TileItem : MonoBehaviour
     public TileEvent OnStopEvent;
     public TileEvent OnReachEvent;
 
+    protected SignalBus _signalBus;
+
+    [Inject]
+    public void Construct(SignalBus signalBus)
+    {
+        _signalBus = signalBus;
+    }
+
     public void Init(int index)
     {
         Index = index;
         _animation.PlayStartAnimation(index);
     }
 
-    public void TriggerOnStopEvent(Player player, Action onEventComplete)
+    public void TriggerOnStopEvent(Player player)
     {
-        OnStopEvent?.Execute(this, player, onEventComplete);
+        OnStopEvent?.Execute(this, player, _signalBus);
     }
 
-    public void TriggerOnReachEvent(Player player, Action onEventComplete)
+    public void TriggerOnReachEvent(Player player)
     {
         _animation.PlayStepOnAnimation();
-        OnReachEvent?.Execute(this, player, onEventComplete);
+        OnReachEvent?.Execute(this, player, _signalBus);
     }
 }

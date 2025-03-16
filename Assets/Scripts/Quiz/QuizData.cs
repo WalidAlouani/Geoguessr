@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class QuizData
 {
     public Guid ID;
-    public QuestionType QuestionType;
+    public QuizType QuestionType;
     public string Question;
     public string CustomImageID;
     public List<QuizAnswer> Answers;
@@ -19,4 +19,4 @@ public class QuizAnswer
     public string Text;
 }
 
-public enum QuestionType { Text, Flag }
+public enum QuizType { Text, Flag }

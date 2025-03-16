@@ -43,14 +43,14 @@ public class QuizFactory
     {
         switch (quizData.QuestionType)
         {
-            case QuestionType.Text:
+            case QuizType.Text:
                 if (typeof(TAnswer) != typeof(string))
                     throw new ArgumentException("For a text quiz, the generic type TAnswer must be string.");
                 // Create the text quiz and cast it to QuizDataBase<TAnswer>
                 var textQuiz = await TextQuiz.CreateAsync(quizData, assetLoader);
                 return textQuiz as QuizDataBase<TAnswer>;
 
-            case QuestionType.Flag:
+            case QuizType.Flag:
                 if (typeof(TAnswer) != typeof(Sprite))
                     throw new ArgumentException("For a flag quiz, the generic type TAnswer must be Sprite.");
                 var flagQuiz = await FlagQuiz.CreateAsync(quizData, assetLoader, countryCodeLookup);

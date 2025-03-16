@@ -87,12 +87,12 @@ public class BoardManager : MonoBehaviour
 
     private void OnTileReached(TileReachedSignal signal)
     {
-        GetTile(signal.TileIndex).TriggerOnReachEvent(signal.Player, null);
+        GetTile(signal.TileIndex).TriggerOnReachEvent(signal.Player);
     }
 
     private void OnTileStopped(TileStoppedSignal signal)
     {
-        GetTile(signal.TileIndex).TriggerOnStopEvent(signal.Player, null);
+        GetTile(signal.TileIndex).TriggerOnStopEvent(signal.Player);
         _positions[signal.Player.Index] = signal.TileIndex;
     }
 

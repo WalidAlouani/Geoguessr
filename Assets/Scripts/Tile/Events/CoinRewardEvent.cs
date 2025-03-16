@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using Zenject;
 
 [CreateAssetMenu(fileName = "CoinEvent", menuName = "ScriptableObjects/Tile Events/Coin Event")]
 public class CoinRewardEvent : TileEvent
@@ -7,7 +8,7 @@ public class CoinRewardEvent : TileEvent
     public int coinAmount = 1000;
     public UI_FloatingText floatingText;
 
-    public override void Execute(TileItem tile, Player player, Action onEventComplete)
+    public override void Execute(TileItem tile, Player player, SignalBus signalBus)
     {
         player.AddCoins(coinAmount);
 
@@ -16,6 +17,5 @@ public class CoinRewardEvent : TileEvent
         obj.Init(coinAmount);
 
         Debug.Log($"{player.Name} received {coinAmount} coins.");
-        onEventComplete?.Invoke(); // Notify that the event is complete
     }
 }

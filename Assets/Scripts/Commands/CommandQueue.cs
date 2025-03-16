@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 
 public class CommandQueue
 {
     private Queue<ICommand> commandQueue = new Queue<ICommand>();
     private bool isExecuting = false;
+    public Action OnQueueEmpty;
 
     public void EnqueueCommand(ICommand command)
     {
@@ -25,6 +27,7 @@ public class CommandQueue
         else
         {
             isExecuting = false;
+            OnQueueEmpty?.Invoke();
         }
     }
 

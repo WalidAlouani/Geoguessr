@@ -8,17 +8,23 @@ public class GameInstaller : MonoInstaller<GameInstaller>
     
     public override void InstallBindings()
     {
-        SignalBusInstaller.Install(Container);
         Container.DeclareSignal<PlayersCreatedSignal>();
+
         Container.DeclareSignal<RollDiceSignal>();
         Container.DeclareSignal<DiceRolledSignal>();
+
         Container.DeclareSignal<TurnStartedSignal>();
         Container.DeclareSignal<TurnEndedSignal>();
+
         Container.DeclareSignal<PlayerStartMoveSignal>();
         Container.DeclareSignal<PlayerFinishMoveSignal>();
+
         Container.DeclareSignal<TileReachedSignal>();
         Container.DeclareSignal<TileStoppedSignal>();
+
         Container.DeclareSignal<CoinsUpdateSignal>();
+
+        Container.DeclareSignal<QuizRequestedSignal>();
         
         Container.Bind<IPlayerFactory>().To<CompositePlayerFactory>().AsSingle();
         Container.BindInstance(playerPrefabMapping).IfNotBound();

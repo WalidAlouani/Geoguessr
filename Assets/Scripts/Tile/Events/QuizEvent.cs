@@ -1,14 +1,14 @@
 using UnityEngine;
-using System;
-using UnityEngine.SceneManagement;
+using Zenject;
 
 [CreateAssetMenu(fileName = "QuizEvent", menuName = "ScriptableObjects/Tile Events/Quiz Event")]
 public class QuizEvent : TileEvent
 {
+    public QuizType quizType;
     public string sceneName;
 
-    public override void Execute(TileItem tile, Player player, Action onEventComplete)
+    public override void Execute(TileItem tile, Player player, SignalBus signalBus)
     {
-        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        signalBus.Fire(new QuizRequestedSignal(player, tile, quizType));
     }
 }

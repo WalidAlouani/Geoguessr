@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Zenject;
 
 public class QuizFlagManager : MonoBehaviour
 {
@@ -12,6 +13,14 @@ public class QuizFlagManager : MonoBehaviour
 
     private TextAsset quizFile;
     private IAssetLoader assetLoader;
+
+    private SignalBus _signalBus;
+
+    [Inject]
+    public void Construct(SignalBus signalBus)
+    {
+        _signalBus = signalBus;
+    }
 
     async void Start()
     {
@@ -32,6 +41,7 @@ public class QuizFlagManager : MonoBehaviour
 
     public void OnQuizFinished()
     {
+        _signalBus.Fire<QuizFinishedSignal>();
         QuizFinished?.Invoke();
         Debug.Log("Exit");
         SceneManager.UnloadSceneAsync("QuizFlag");

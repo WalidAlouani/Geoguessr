@@ -1,4 +1,5 @@
 using DG.Tweening;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
@@ -26,6 +27,9 @@ public class UI_BoardManager : MonoBehaviour
         _signalBus.Subscribe<PlayersCreatedSignal>(OnPlayersCreated);
         _signalBus.Subscribe<TurnStartedSignal>(OnTurnedChanged);
         _signalBus.Subscribe<CoinsUpdateSignal>(OnCoinsUpdated);
+
+        _signalBus.Subscribe<QuizRequestedSignal>(OnQuizRequested);
+        _signalBus.Subscribe<QuizFinishedSignal>(OnQuizFinished);
     }
 
     private void OnDisable()
@@ -33,6 +37,9 @@ public class UI_BoardManager : MonoBehaviour
         _signalBus.Unsubscribe<PlayersCreatedSignal>(OnPlayersCreated);
         _signalBus.Unsubscribe<TurnStartedSignal>(OnTurnedChanged);
         _signalBus.Unsubscribe<CoinsUpdateSignal>(OnCoinsUpdated);
+
+        _signalBus.Unsubscribe<QuizRequestedSignal>(OnQuizRequested);
+        _signalBus.Unsubscribe<QuizFinishedSignal>(OnQuizFinished);
     }
 
     private void OnPlayersCreated(PlayersCreatedSignal signal)
@@ -63,5 +70,17 @@ public class UI_BoardManager : MonoBehaviour
     private void OnCoinsUpdated(CoinsUpdateSignal signal)
     {
         playersUI[signal.Player.Index].UpdateCoins(signal.Player.Coins);
+    }
+
+    private void OnQuizRequested()
+    {
+        top.GetComponent<Animator>().SetBool("On", false);
+        bottom.GetComponent<Animator>().SetBool("On", false);
+    }
+
+    private void OnQuizFinished()
+    {
+        top.GetComponent<Animator>().SetBool("On", true);
+        bottom.GetComponent<Animator>().SetBool("On", true);
     }
 }

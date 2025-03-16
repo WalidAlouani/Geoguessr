@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -7,6 +8,7 @@ public class TurnManager : MonoBehaviour
     private BoardManager boardManager;
 
     private SignalBus _signalBus;
+    private CommandQueue _commandQueue = new CommandQueue();
 
     [Inject]
     public void Construct(SignalBus signalBus)
@@ -18,8 +20,7 @@ public class TurnManager : MonoBehaviour
     {
         this.playersManager = playersManager;
         this.boardManager = boardManager;
-
-        SubscribeToCurrentPlayer();
+        
         playersManager.Current.TurnStarted();
         _signalBus.Fire(new TurnStartedSignal(playersManager.Current));
     }
@@ -27,38 +28,58 @@ public class TurnManager : MonoBehaviour
     private void OnEnable()
     {
         _signalBus.Subscribe<DiceRolledSignal>(OnDiceRolled);
+        _signalBus.Subscribe<QuizRequestedSignal>(OnQuizRequested);
+        _signalBus.Subscribe<QuizFinishedSignal>(OnQuizFinished);
+        _commandQueue.OnQueueEmpty += OnChangeTurn;
     }
 
     private void OnDisable()
     {
         _signalBus.Unsubscribe<DiceRolledSignal>(OnDiceRolled);
+        _signalBus.Unsubscribe<QuizRequestedSignal>(OnQuizRequested);
+        _signalBus.Unsubscribe<QuizFinishedSignal>(OnQuizFinished);
+        _commandQueue.OnQueueEmpty -= OnChangeTurn;
     }
 
     public void OnDiceRolled(DiceRolledSignal signal)
     {
-        var tiles = boardManager.GetTiles(playersManager.Current.Index, signal.Steps);
-        playersManager.Current.Move(tiles);
+        var player = playersManager.Current;
+        var tiles = boardManager.GetTiles(player.Index, signal.Steps);
+        _signalBus.Fire(new PlayerStartMoveSignal(player));
+
+        var waitCommand = new WaitCommand(player, 1, _commandQueue);
+        _commandQueue.EnqueueCommand(waitCommand);
+
+        var moveCommand = new MoveCommand(player, tiles, _commandQueue);
+        _commandQueue.EnqueueCommand(moveCommand);
+
+        waitCommand = new WaitCommand(player, 1, _commandQueue);
+        _commandQueue.EnqueueCommand(waitCommand);
     }
 
-    private void SubscribeToCurrentPlayer()
+    private void OnQuizRequested(QuizRequestedSignal signal)
     {
-        _signalBus.Subscribe<PlayerFinishMoveSignal>(OnPlayerMoveComplete);
+        var player = playersManager.Current;
+
+        var quizCommand = new QuizCommand(signal.QuizType);
+        _commandQueue.EnqueueCommand(quizCommand);
+
+        var waitCommand = new WaitCommand(player, 1, _commandQueue);
+        _commandQueue.EnqueueCommand(waitCommand);
     }
 
-    private void UnsubscribeFromCurrentPlayer()
+    private void OnQuizFinished()
     {
-        _signalBus.Unsubscribe<PlayerFinishMoveSignal>(OnPlayerMoveComplete);
+        _commandQueue.CommandFinished();
     }
 
-    private void OnPlayerMoveComplete()
+    private void OnChangeTurn()
     {
-        UnsubscribeFromCurrentPlayer();
         playersManager.Current.TurnEnded();
         _signalBus.Fire(new TurnEndedSignal(playersManager.Current));
 
         playersManager.NextPlayer();
 
-        SubscribeToCurrentPlayer();
         playersManager.Current.TurnStarted();
         _signalBus.Fire(new TurnStartedSignal(playersManager.Current));
     }
