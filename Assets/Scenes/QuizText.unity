@@ -1256,7 +1256,7 @@ GameObject:
   - component: {fileID: 973865150}
   - component: {fileID: 973865149}
   m_Layer: 0
-  m_Name: QuizManager
+  m_Name: QuizTextManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1276,9 +1276,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jsonLabel:
     m_LabelString: TextQuiz
-  uI_QuizManager: {fileID: 1061662810}
   RightAnswerReward: 5000
   WrongAnswerReward: 2000
+  uI_QuizManager: {fileID: 1061662810}
 --- !u!4 &973865150
 Transform:
   m_ObjectHideFlags: 0
