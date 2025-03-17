@@ -1,49 +1,15 @@
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using Zenject;
 
-public class QuizFlagManager : MonoBehaviour
+public class QuizFlagManager : QuizManagerBase<FlagQuiz, Sprite>
 {
-    [SerializeField] private AssetLabelReference jsonLabel;
     [SerializeField] private UI_QuizManagerFlag uI_QuizManager;
     [SerializeField] private CountryCodes CountryCodes;
 
-    public int RightAnswerReward = 5000;
-    public int WrongAnswerReward = 2000;
+    protected override IQuizUIManager<FlagQuiz, Sprite> UIQuizManager => uI_QuizManager;
 
-    private IAssetLoader _assetLoader = new AddressableLoader();
-    private SignalBus _signalBus;
-    private SceneLoader _sceneLoader;
-
-    [Inject]
-    public void Construct(SignalBus signalBus, SceneLoader sceneLoader)
+    protected override async Task<FlagQuiz> CreateQuizAsync(QuizData quizData)
     {
-        _signalBus = signalBus;
-        _sceneLoader = sceneLoader;
-    }
-
-    async void Start()
-    {
-        var res = await RandomResourceKeyPicker.GetRandomResourceKeyAsync(jsonLabel);
-
-        var quizFile = await _assetLoader.LoadAssetAsync<TextAsset>(res);
-
-        var quizData = QuizSerializerJson.LoadFromJson(quizFile.text);
-
-        var quiz = await FlagQuiz.CreateAsync(quizData, _assetLoader, CountryCodes);
-
-        uI_QuizManager.Initialize(this, quiz);
-    }
-
-    public void OnQuizFinished(QuizResult quizResult)
-    {
-        var reward = quizResult == QuizResult.Correct ? RightAnswerReward : WrongAnswerReward;
-        _signalBus.Fire(new QuizFinishedSignal(reward));
-        _sceneLoader.UnloadScene(gameObject.scene.name);
-    }
-
-    private void OnDestroy()
-    {
-        _assetLoader.ReleaseAll();
+        return await FlagQuiz.CreateAsync(quizData, _assetLoader, CountryCodes);
     }
 }

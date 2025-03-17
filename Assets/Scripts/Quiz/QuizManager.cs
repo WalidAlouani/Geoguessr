@@ -1,49 +1,14 @@
-using JetBrains.Annotations;
+using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using Zenject;
 
-public class QuizManager : MonoBehaviour
+public class QuizTextManager : QuizManagerBase<TextQuiz, string>
 {
-    [SerializeField] private AssetLabelReference jsonLabel;
     [SerializeField] private UI_QuizManager uI_QuizManager;
 
-    public int RightAnswerReward = 5000;
-    public int WrongAnswerReward = 2000;
+    protected override IQuizUIManager<TextQuiz, string> UIQuizManager => uI_QuizManager;
 
-    private IAssetLoader _assetLoader = new AddressableLoader();
-    private SignalBus _signalBus;
-    private SceneLoader _sceneLoader;
-
-    [Inject]
-    public void Construct(SignalBus signalBus, SceneLoader sceneLoader)
+    protected override async Task<TextQuiz> CreateQuizAsync(QuizData quizData)
     {
-        _signalBus = signalBus;
-        _sceneLoader = sceneLoader;
-    }
-
-    async void Start()
-    {
-        var res = await RandomResourceKeyPicker.GetRandomResourceKeyAsync(jsonLabel);
-
-        var quizFile = await _assetLoader.LoadAssetAsync<TextAsset>(res);
-
-        var quizData = QuizSerializerJson.LoadFromJson(quizFile.text);
-
-        var quiz = await TextQuiz.CreateAsync(quizData, _assetLoader);
-
-        uI_QuizManager.Initialize(this, quiz);
-    }
-
-    public void OnQuizFinished(QuizResult quizResult)
-    {
-        var reward = quizResult == QuizResult.Correct ? RightAnswerReward : WrongAnswerReward;
-        _signalBus.Fire(new QuizFinishedSignal(reward));
-        _sceneLoader.UnloadScene(gameObject.scene.name);
-    }
-
-    private void OnDestroy()
-    {
-        _assetLoader.ReleaseAll();
+        return await TextQuiz.CreateAsync(quizData, _assetLoader);
     }
 }

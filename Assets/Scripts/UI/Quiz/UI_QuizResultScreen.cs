@@ -15,7 +15,7 @@ public class UI_QuizResultScreen : MonoBehaviour
     [SerializeField] private GameObject timeIsUp;
     [SerializeField] private Button continueButton;
 
-    public void Initialize(QuizManager quizManager, TextQuiz quizData, QuizResult quizResult)
+    public void Initialize(QuizTextManager quizManager, TextQuiz quizData, QuizResult quizResult)
     {
         switch (quizResult)
         {

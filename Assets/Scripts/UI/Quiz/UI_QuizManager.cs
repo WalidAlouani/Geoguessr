@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
-public class UI_QuizManager : MonoBehaviour
+public class UI_QuizManager : MonoBehaviour, IQuizUIManager<TextQuiz, string>
 {
     [SerializeField] private UI_QuizQuestionScreen question; //Maybe IQuizScreen
     [SerializeField] private UI_QuizResultScreen result;
 
-    private QuizManager _quizManager;
+    private QuizManagerBase<TextQuiz, string> _quizManager;
     private TextQuiz _quizData;
 
     private void OnEnable()
@@ -19,7 +19,7 @@ public class UI_QuizManager : MonoBehaviour
         question.OnAnswered -= OnQuizAnswered;
     }
 
-    public void Initialize(QuizManager quizManager, TextQuiz quizData)
+    public void Initialize(QuizManagerBase<TextQuiz, string> quizManager, TextQuiz quizData)
     {
         _quizManager = quizManager;
         _quizData = quizData;
@@ -38,6 +38,6 @@ public class UI_QuizManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         result.gameObject.SetActive(true);
         question.gameObject.SetActive(false);
-        result.Initialize(_quizManager, _quizData, quizResult);
+        result.Initialize((QuizTextManager)_quizManager, _quizData, quizResult);
     }
 }

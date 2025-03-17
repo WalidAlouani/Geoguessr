@@ -1,12 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
-public class UI_QuizManagerFlag : MonoBehaviour
+public class UI_QuizManagerFlag : MonoBehaviour, IQuizUIManager<FlagQuiz, Sprite>
 {
     [SerializeField] private UI_QuizFlagQuestionScreen question; //Maybe IQuizView
     [SerializeField] private UI_QuizFlagResultScreen result;
 
-    private QuizFlagManager _quizManager;
+    private QuizManagerBase<FlagQuiz, Sprite> _quizManager;
     private FlagQuiz _quizData;
 
     private void OnEnable()
@@ -19,7 +19,7 @@ public class UI_QuizManagerFlag : MonoBehaviour
         question.OnAnswered -= OnQuizAnswered;
     }
 
-    public void Initialize(QuizFlagManager quizManager, FlagQuiz quizData)
+    public void Initialize(QuizManagerBase<FlagQuiz, Sprite> quizManager, FlagQuiz quizData)
     {
         _quizManager = quizManager;
         _quizData = quizData;
@@ -38,6 +38,6 @@ public class UI_QuizManagerFlag : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         result.gameObject.SetActive(true);
         question.gameObject.SetActive(false);
-        result.Initialize(_quizManager, _quizData, quizResult);
+        result.Initialize((QuizFlagManager)_quizManager, _quizData, quizResult);
     }
 }
