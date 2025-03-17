@@ -1277,6 +1277,8 @@ MonoBehaviour:
   jsonLabel:
     m_LabelString: TextQuiz
   uI_QuizManager: {fileID: 1061662810}
+  RightAnswerReward: 5000
+  WrongAnswerReward: 2000
 --- !u!4 &973865150
 Transform:
   m_ObjectHideFlags: 0
@@ -1639,11 +1641,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   correctAnswerText: {fileID: 1509087684}
+  coinText: {fileID: 878915536}
   tapToContinueText: {fileID: 621131355}
   tapToContinue: {fileID: 1616375570}
   correct: {fileID: 1574878782}
   wrong: {fileID: 1536140698}
   timeIsUp: {fileID: 761753342}
+  continueButton: {fileID: 563985883}
 --- !u!95 &1047491044
 Animator:
   serializedVersion: 5
@@ -2136,7 +2140,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.21044922, y: -1.0335693}
+  m_AnchoredPosition: {x: 0.21044922, y: -1.0336914}
   m_SizeDelta: {x: -93.60596, y: -85.193115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1189402790
@@ -3813,7 +3817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

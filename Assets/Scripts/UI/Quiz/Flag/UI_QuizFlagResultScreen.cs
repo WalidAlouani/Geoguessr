@@ -14,30 +14,29 @@ public class UI_QuizFlagResultScreen : MonoBehaviour
     [SerializeField] private GameObject correct;
     [SerializeField] private GameObject wrong;
     [SerializeField] private GameObject timeIsUp;
+    [SerializeField] private Button continueButton;
 
-    [SerializeField] private int rightAnswerReward = 5000;
-    [SerializeField] private int wrongAnswerReward = 2000;
-
-    public void SetResult(FlagQuiz quizData, QuizResult quizResult)
+    public void Initialize(QuizFlagManager quizManager, FlagQuiz quizData, QuizResult quizResult)
     {
         switch (quizResult)
         {
             case QuizResult.Correct:
                 correct.SetActive(true);
-                coinText.text = rightAnswerReward.ToString();
+                coinText.text = quizManager.RightAnswerReward.ToString();
                 break;
             case QuizResult.Wrong:
                 wrong.SetActive(true);
-                coinText.text = wrongAnswerReward.ToString();
+                coinText.text = quizManager.WrongAnswerReward.ToString();
                 break;
             case QuizResult.TimeIsUp:
                 timeIsUp.SetActive(true);
-                coinText.text = wrongAnswerReward.ToString();
+                coinText.text = quizManager.WrongAnswerReward.ToString();
                 break;
         }
 
         correctAnswerImage.sprite = quizData.Answers[quizData.CorrectAnswerIndex];
         correctAnswerText.text = quizData.CorrectCountryName;
+        continueButton.onClick.AddListener(() => quizManager.OnQuizFinished(quizResult));
 
         StartCoroutine(ShowTapToContinue());
     }

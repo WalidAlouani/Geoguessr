@@ -8,8 +8,10 @@ public class QuizFlagManager : MonoBehaviour
     [SerializeField] private UI_QuizManagerFlag uI_QuizManager;
     [SerializeField] private CountryCodes CountryCodes;
 
-    private IAssetLoader _assetLoader = new AddressableLoader();
+    public int RightAnswerReward = 5000;
+    public int WrongAnswerReward = 2000;
 
+    private IAssetLoader _assetLoader = new AddressableLoader();
     private SignalBus _signalBus;
     private SceneLoader _sceneLoader;
 
@@ -30,12 +32,13 @@ public class QuizFlagManager : MonoBehaviour
 
         var quiz = await FlagQuiz.CreateAsync(quizData, _assetLoader, CountryCodes);
 
-        uI_QuizManager.Initialize(quiz);
+        uI_QuizManager.Initialize(this, quiz);
     }
 
-    public void OnQuizFinished()
+    public void OnQuizFinished(QuizResult quizResult)
     {
-        _signalBus.Fire(new QuizFinishedSignal());
+        var reward = quizResult == QuizResult.Correct ? RightAnswerReward : WrongAnswerReward;
+        _signalBus.Fire(new QuizFinishedSignal(reward));
         _sceneLoader.UnloadScene(gameObject.scene.name);
     }
 

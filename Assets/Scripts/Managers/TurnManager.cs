@@ -10,7 +10,6 @@ public class TurnManager : MonoBehaviour
     private CommandQueue _commandQueue = new CommandQueue();
 
     private int _currentPlayerIndex = 0;
-
     public Player CurrentPlayer => playersManager.Players[_currentPlayerIndex];
 
     [Inject]
@@ -71,9 +70,9 @@ public class TurnManager : MonoBehaviour
     {
         _commandQueue.CommandFinished();
 
-        CurrentPlayer.AddCoins(5000);
-        var position = CurrentPlayer.Controller.transform.position;
-        _signalBus.Fire(new CoinsAddedSignal(CurrentPlayer, position, 5000));
+        CurrentPlayer.AddCoins(signal.CoinAmount);
+        var position = boardManager.GetPlayerPosition(CurrentPlayer.Index);
+        _signalBus.Fire(new CoinsAddedSignal(CurrentPlayer, position, signal.CoinAmount));
     }
 
     private void OnChangeTurn()

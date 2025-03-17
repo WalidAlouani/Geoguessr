@@ -816,6 +816,8 @@ MonoBehaviour:
     m_LabelString: FlagQuiz
   uI_QuizManager: {fileID: 1061662810}
   CountryCodes: {fileID: 11400000, guid: 3684fbd3ed40d054590fa944a237c374, type: 2}
+  RightAnswerReward: 5000
+  WrongAnswerReward: 2000
 --- !u!1 &984310158
 GameObject:
   m_ObjectHideFlags: 0
@@ -1093,8 +1095,7 @@ MonoBehaviour:
   correct: {fileID: 1574878782}
   wrong: {fileID: 1536140698}
   timeIsUp: {fileID: 1928992647}
-  rightAnswerReward: 5000
-  wrongAnswerReward: 2000
+  continueButton: {fileID: 563985883}
 --- !u!95 &1047491044
 Animator:
   serializedVersion: 5
@@ -1428,7 +1429,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.13760418, y: 0.647}
   m_AnchorMax: {x: 0.8775002, y: 0.81461465}
-  m_AnchoredPosition: {x: -10.365, y: -277}
+  m_AnchoredPosition: {x: -10.365234, y: -277}
   m_SizeDelta: {x: 145.13, y: 95.7177}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1156331015
@@ -3526,7 +3527,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

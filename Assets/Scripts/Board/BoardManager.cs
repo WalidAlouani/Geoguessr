@@ -80,6 +80,11 @@ public class BoardManager : MonoBehaviour
         return path;
     }
 
+    public Vector3 GetPlayerPosition(int playerIndex)
+    {
+        return GetTilePosition(_playerTilePositions[playerIndex]);
+    }
+
     private void OnTileReached(TileReachedSignal signal)
     {
         GetTile(signal.TileIndex).TriggerOnReachEvent(signal.Player);
