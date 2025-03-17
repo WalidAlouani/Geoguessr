@@ -6,7 +6,7 @@ public class UI_QuizManagerFlag : MonoBehaviour
     [SerializeField] private UI_QuizFlagQuestionScreen question; //Maybe IQuizView
     [SerializeField] private UI_QuizFlagResultScreen result;
 
-    private FlagQuiz quizData;
+    private FlagQuiz _quizData;
 
     private void OnEnable()
     {
@@ -20,7 +20,7 @@ public class UI_QuizManagerFlag : MonoBehaviour
 
     public void Initialize(FlagQuiz quizData)
     {
-        this.quizData = quizData;
+        _quizData = quizData;
         result.gameObject.SetActive(false);
         question.gameObject.SetActive(true);
         question.DisplayQuiz(quizData);
@@ -36,6 +36,6 @@ public class UI_QuizManagerFlag : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         result.gameObject.SetActive(true);
         question.gameObject.SetActive(false);
-        result.SetResult(quizData, quizResult);
+        result.SetResult(_quizData, quizResult);
     }
 }

@@ -1,17 +1,15 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 public class BoardManager : MonoBehaviour
 {
-    private List<TileItem> tileItems;
-    private float multiplier = .5f;
-    public int TilesCount { get; private set; }
-
-    private SignalBus _signalBus;
+    private List<TileItem> _tileItems;
+    private int _tilesCount;
+    private float _multiplier = .5f;
+    private List<int> _playerTilePositions = new List<int>();
     private ITileFactory _tileFactory;
-    private List<int> _positions = new List<int>();
+    private SignalBus _signalBus;
 
     [Inject]
     public void Construct(ITileFactory tileFactory, SignalBus signalBus)
@@ -22,7 +20,7 @@ public class BoardManager : MonoBehaviour
 
     public void Init(List<TileData> tileDatas)
     {
-        TilesCount = tileDatas.Count;
+        _tilesCount = tileDatas.Count;
         CreateBoard(tileDatas);
     }
 
@@ -42,21 +40,21 @@ public class BoardManager : MonoBehaviour
 
     private void CreateBoard(List<TileData> tileDatas)
     {
-        tileItems = new List<TileItem>();
+        _tileItems = new List<TileItem>();
         for (int i = 0; i < tileDatas.Count; i++)
         {
             var tileData = tileDatas[i];
-            var position = new Vector3(tileData.Position.X * multiplier, 0, tileData.Position.Y * multiplier);
+            var position = new Vector3(tileData.Position.X * _multiplier, 0, tileData.Position.Y * _multiplier);
 
             var tileItem = _tileFactory.CreateTile(tileData, position, transform);
             tileItem.Init(i);
-            tileItems.Add(tileItem);
+            _tileItems.Add(tileItem);
         }
     }
 
     public TileItem GetTile(int tileIndex)
     {
-        return tileItems[tileIndex % TilesCount];
+        return _tileItems[tileIndex % _tilesCount];
     }
 
     public Vector3 GetTilePosition(int tileIndex)
@@ -69,20 +67,17 @@ public class BoardManager : MonoBehaviour
         return GetTilePosition(0);
     }
 
-    public List<Vector3> GetTiles(int playerIndex, int steps)
+    public List<Vector3> GetTilesForPlayerMovement(int playerIndex, int steps)
     {
-        var currentTileIndex = _positions[playerIndex];
-
-        List<Vector3> tiles = new List<Vector3>();
+        int currentTileIndex = _playerTilePositions[playerIndex];
+        List<Vector3> path = new List<Vector3>();
         int targetTileIndex = currentTileIndex + steps;
-        while (currentTileIndex < targetTileIndex)
-        {
-            currentTileIndex++;
-            Vector3 nextTile = GetTilePosition(currentTileIndex);
-            tiles.Add(nextTile);
-        }
 
-        return tiles;
+        for (int i = currentTileIndex + 1; i <= targetTileIndex; i++)
+        {
+            path.Add(GetTilePosition(i));
+        }
+        return path;
     }
 
     private void OnTileReached(TileReachedSignal signal)
@@ -93,14 +88,14 @@ public class BoardManager : MonoBehaviour
     private void OnTileStopped(TileStoppedSignal signal)
     {
         GetTile(signal.TileIndex).TriggerOnStopEvent(signal.Player);
-        _positions[signal.Player.Index] = signal.TileIndex;
+        _playerTilePositions[signal.Player.Index] = signal.TileIndex;
     }
 
     private void OnPlayersCreated(PlayersCreatedSignal signal)
     {
         for (int i = 0; i < signal.Players.Count; i++)
         {
-            _positions.Add(0);
+            _playerTilePositions.Add(0);
         }
     }
 }

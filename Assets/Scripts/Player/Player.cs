@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
 using Zenject;
 
 public class Player
 {
-    public int Index { get; private set; }
-    public PlayerController Controller { get; set; }
-    public string Name { get; private set; }
-    public PlayerType Type { get; private set; }
+    public int Index { get; }
+    public string Name { get;}
+    public PlayerType Type { get;}
     public int Coins { get; private set; }
+    public PlayerController Controller { get; private set; }
 
-    private SignalBus _signalBus;
+    private readonly SignalBus _signalBus;
 
     public Player(int index, string name, PlayerType type, int coins, SignalBus signalBus)
     {
@@ -20,6 +18,11 @@ public class Player
         Type = type;
         Coins = coins;
         _signalBus = signalBus;
+    }
+
+    public void SetController(PlayerController controller)
+    {
+        Controller = controller;
     }
 
     public void TurnStarted()

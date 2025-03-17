@@ -6,7 +6,7 @@ public class UI_QuizManager : MonoBehaviour
     [SerializeField] private UI_QuizQuestionScreen question; //Maybe IQuizScreen
     [SerializeField] private UI_QuizResultScreen result;
 
-    private TextQuiz quizData;
+    private TextQuiz _quizData;
 
     private void OnEnable()
     {
@@ -20,7 +20,7 @@ public class UI_QuizManager : MonoBehaviour
 
     public void Initialize(TextQuiz quizData)
     {
-        this.quizData = quizData;
+        _quizData = quizData;
         result.gameObject.SetActive(false);
         question.gameObject.SetActive(true);
         question.DisplayQuiz(quizData);
@@ -36,6 +36,6 @@ public class UI_QuizManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         result.gameObject.SetActive(true);
         question.gameObject.SetActive(false);
-        result.SetResult(quizData, quizResult);
+        result.SetResult(_quizData, quizResult);
     }
 }

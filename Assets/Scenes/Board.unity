@@ -903,7 +903,7 @@ MonoBehaviour:
   boundaries: {fileID: 1142996497}
   inputHandler: {fileID: 330585550}
   smoothSpeed: 10
-  Target: {fileID: 0}
+  target: {fileID: 0}
 --- !u!114 &330585550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2781,6 +2781,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4661742600940936817, guid: b2e3b8e2d3247a241a5f2829b19e2ac9,
+        type: 3}
+      propertyPath: fakeProgressDuration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4661742600940936822, guid: b2e3b8e2d3247a241a5f2829b19e2ac9,
         type: 3}
       propertyPath: m_Name
@@ -3747,7 +3752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8ebec462a92dda4085b933577a990d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floatingTextFactory: {fileID: 1147163192}
+  _floatingTextFactory: {fileID: 1147163192}
 --- !u!1 &1197273097
 GameObject:
   m_ObjectHideFlags: 0
@@ -5378,11 +5383,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bfc74f37191c2514eb2134cbd91c33a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boardData: {fileID: 11400000, guid: 010b84a0f33ce614dbd2b2a5cb40b5ce, type: 2}
-  playersManager: {fileID: 1842744222}
-  boardManager: {fileID: 1204229137}
-  turnManager: {fileID: 1842744221}
-  cameraBoundaries: {fileID: 1142996497}
+  _boardData: {fileID: 11400000, guid: 010b84a0f33ce614dbd2b2a5cb40b5ce, type: 2}
+  _playersData: {fileID: 11400000, guid: b5dd229e021c69341861c6025d24a2ab, type: 2}
+  _playersManager: {fileID: 1842744222}
+  _boardManager: {fileID: 1204229137}
+  _turnManager: {fileID: 1842744221}
+  _cameraMovement: {fileID: 330585549}
 --- !u!4 &1842744220
 Transform:
   m_ObjectHideFlags: 0
@@ -5422,15 +5428,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6f2e32588f2b84897ccc71d4ef8378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playersData:
-  - Name: Player1
-    Type: 0
-  - Name: Player2
-    Type: 0
-  - Name: Player3
-    Type: 1
-  - Name: Player4
-    Type: 1
 --- !u!1 &1914211291
 GameObject:
   m_ObjectHideFlags: 0

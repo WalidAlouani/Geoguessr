@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] private PlayerVisual visual;
     [SerializeField] private PlayerAnimator _animation;
-    [SerializeField] private float moveSpeed = 2f; // Speed for animation
+    [SerializeField] private float _moveSpeed = 2f; // Speed for animation
 
     public int Index { get; private set; }
     public int CurrentTileIndex { get; private set; }
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     public event Action OnMoveComplete;
 
     protected Player _player;
-    protected PlayerState state;
+    protected PlayerState _state;
     protected SignalBus _signalBus;
 
     [Inject]
@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
             float journey = 0f;
             while (journey < 1f)
             {
-                journey += Time.deltaTime * moveSpeed;
+                journey += Time.deltaTime * _moveSpeed;
                 transform.position = Vector3.Lerp(startPos, endPos, journey);
                 _animation.UpdateMovingTime(journey);
                 yield return null;
@@ -91,10 +91,10 @@ public class PlayerController : MonoBehaviour
 
     private void SetState(PlayerState state)
     {
-        if (this.state == state)
+        if (this._state == state)
             return;
 
-        this.state = state;
+        this._state = state;
         OnStateChange?.Invoke(state);
     }
 

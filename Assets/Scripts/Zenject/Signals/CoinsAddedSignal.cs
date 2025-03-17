@@ -1,13 +1,16 @@
+
+using UnityEngine;
+
 public class CoinsAddedSignal
 {
     public Player Player { get; }
-    public TileItem Tile { get; }
+    public Vector3 Position { get; }
     public int CoinAmount { get; }
 
-    public CoinsAddedSignal(Player player, TileItem tile, int coinAmount)
+    public CoinsAddedSignal(Player player, Vector3 position, int coinAmount)
     {
         Player = player;
-        Tile = tile;
+        Position = position;
         CoinAmount = coinAmount;
     }
 }

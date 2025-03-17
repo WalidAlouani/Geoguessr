@@ -10,7 +10,7 @@ public class CoinRewardEvent : TileEvent
     {
         player.AddCoins(coinAmount);
 
-        signalBus.Fire(new CoinsAddedSignal(player, tile, coinAmount));
+        signalBus.Fire(new CoinsAddedSignal(player, tile.transform.position, coinAmount));
 
         Debug.Log($"{player.Name} received {coinAmount} coins.");
     }

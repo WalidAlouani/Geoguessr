@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Zenject;
 
@@ -10,6 +9,10 @@ public class TurnManager : MonoBehaviour
     private SignalBus _signalBus;
     private CommandQueue _commandQueue = new CommandQueue();
 
+    private int _currentPlayerIndex = 0;
+
+    public Player CurrentPlayer => playersManager.Players[_currentPlayerIndex];
+
     [Inject]
     public void Construct(SignalBus signalBus)
     {
@@ -20,9 +23,9 @@ public class TurnManager : MonoBehaviour
     {
         this.playersManager = playersManager;
         this.boardManager = boardManager;
-        
-        playersManager.Current.TurnStarted();
-        _signalBus.Fire(new TurnStartedSignal(playersManager.Current));
+
+        CurrentPlayer.TurnStarted();
+        _signalBus.Fire(new TurnStartedSignal(CurrentPlayer));
     }
 
     private void OnEnable()
@@ -43,44 +46,44 @@ public class TurnManager : MonoBehaviour
 
     public void OnDiceRolled(DiceRolledSignal signal)
     {
-        var player = playersManager.Current;
-        var tiles = boardManager.GetTiles(player.Index, signal.Steps);
-        _signalBus.Fire(new PlayerStartMoveSignal(player));
+        var tiles = boardManager.GetTilesForPlayerMovement(CurrentPlayer.Index, signal.Steps);
+        _signalBus.Fire(new PlayerStartMoveSignal(CurrentPlayer));
 
-        var waitCommand = new WaitCommand(player, 1, _commandQueue);
+        var waitCommand = new WaitCommand(CurrentPlayer, 1, _commandQueue);
         _commandQueue.EnqueueCommand(waitCommand);
 
-        var moveCommand = new MoveCommand(player, tiles, _commandQueue);
+        var moveCommand = new MoveCommand(CurrentPlayer, tiles, _commandQueue);
         _commandQueue.EnqueueCommand(moveCommand);
 
-        waitCommand = new WaitCommand(player, 1, _commandQueue);
         _commandQueue.EnqueueCommand(waitCommand);
     }
 
     private void OnQuizRequested(QuizRequestedSignal signal)
     {
-        var player = playersManager.Current;
-
         var quizCommand = new QuizCommand(signal.QuizType, signal.SceneName);
         _commandQueue.EnqueueCommand(quizCommand);
 
-        var waitCommand = new WaitCommand(player, 1, _commandQueue);
+        var waitCommand = new WaitCommand(CurrentPlayer, 1, _commandQueue);
         _commandQueue.EnqueueCommand(waitCommand);
     }
 
-    private void OnQuizFinished()
+    private void OnQuizFinished(QuizFinishedSignal signal)
     {
         _commandQueue.CommandFinished();
+
+        CurrentPlayer.AddCoins(5000);
+        var position = CurrentPlayer.Controller.transform.position;
+        _signalBus.Fire(new CoinsAddedSignal(CurrentPlayer, position, 5000));
     }
 
     private void OnChangeTurn()
     {
-        playersManager.Current.TurnEnded();
-        _signalBus.Fire(new TurnEndedSignal(playersManager.Current));
+        CurrentPlayer.TurnEnded();
+        _signalBus.Fire(new TurnEndedSignal(CurrentPlayer));
 
-        playersManager.NextPlayer();
+        _currentPlayerIndex = (_currentPlayerIndex + 1) % playersManager.Players.Count;
 
-        playersManager.Current.TurnStarted();
-        _signalBus.Fire(new TurnStartedSignal(playersManager.Current));
+        CurrentPlayer.TurnStarted();
+        _signalBus.Fire(new TurnStartedSignal(CurrentPlayer));
     }
 }

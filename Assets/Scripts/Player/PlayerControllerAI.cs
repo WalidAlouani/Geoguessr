@@ -1,7 +1,5 @@
 using UnityEngine;
-using System;
 using System.Collections;
-using Zenject;
 
 public class PlayerControllerAI : PlayerController
 {

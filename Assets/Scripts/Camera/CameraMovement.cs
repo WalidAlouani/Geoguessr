@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -6,10 +7,10 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private CameraBoundaries boundaries;
     [SerializeField] private CameraInputHandler inputHandler;
     [SerializeField] private float smoothSpeed = 10f;
-    [SerializeField] private Transform Target;
+    [SerializeField] private Transform target;
 
-    private Vector3 targetPosition;
-    private Vector3 offset;
+    private Vector3 _targetPosition;
+    private Vector3 _offset;
 
     private SignalBus _signalBus;
 
@@ -21,8 +22,13 @@ public class CameraMovement : MonoBehaviour
 
     void Start()
     {
-        targetPosition = transform.position;
-        offset = transform.position;
+        _targetPosition = transform.position;
+        _offset = transform.position;
+    }
+
+    public void Init(Vector2 boardCenter)
+    {
+        boundaries.Init(boardCenter);
     }
 
     private void OnEnable()
@@ -34,12 +40,12 @@ public class CameraMovement : MonoBehaviour
 
     private void OnTurnStarted(PlayerStartMoveSignal signal)
     {
-        Target = signal.Player.Controller.transform;
+        target = signal.Player.Controller.transform;
     }
 
     private void OnTurnEnded(TurnEndedSignal signal)
     {
-        Target = null;
+        target = null;
     }
 
     private void OnDisable()
@@ -51,17 +57,17 @@ public class CameraMovement : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (Target == null)
-            targetPosition = boundaries.ClampToBounds(targetPosition);
+        if (target == null)
+            _targetPosition = boundaries.ClampToBounds(_targetPosition);
         else
-            targetPosition = Target.position + offset;
+            _targetPosition = target.position + _offset;
 
-        transform.position = Vector3.Lerp(transform.position, targetPosition, smoothSpeed * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, _targetPosition, smoothSpeed * Time.deltaTime);
     }
 
     private void OnDragUpdate(Vector3 worldDelta)
     {
-        if (Target == null)
-            targetPosition += worldDelta;
+        if (target == null)
+            _targetPosition += worldDelta;
     }
 }

@@ -3,7 +3,7 @@ using Zenject;
 
 public class BoardEffects : MonoBehaviour
 {
-    [SerializeField] private FloatingTextFactory floatingTextFactory;
+    [SerializeField] private FloatingTextFactory _floatingTextFactory;
 
     private SignalBus _signalBus;
 
@@ -25,7 +25,6 @@ public class BoardEffects : MonoBehaviour
 
     private void OnCoinsAdded(CoinsAddedSignal signal)
     {
-        var position = signal.Tile.transform.position;
-        floatingTextFactory.Create(position, signal.CoinAmount);
+        _floatingTextFactory.Create(signal.Position, signal.CoinAmount);
     }
 }

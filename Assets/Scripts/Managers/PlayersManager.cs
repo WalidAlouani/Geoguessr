@@ -4,15 +4,10 @@ using Zenject;
 
 public class PlayersManager : MonoBehaviour
 {
-    [SerializeField] private List<PlayerData> playersData;
-
     private IPlayerFactory _playerFactory;
     private SignalBus _signalBus;
 
-    private List<Player> players;
-    private int currentPlayerIndex = 0;
-
-    public Player Current => players[currentPlayerIndex];
+    public List<Player> Players { get; private set; }
 
     [Inject]
     public void Construct(SignalBus signalBus, IPlayerFactory playerFactory)
@@ -21,22 +16,17 @@ public class PlayersManager : MonoBehaviour
         _signalBus = signalBus;
     }
 
-    public void Init(Vector3 spawnPosition)
+    public void Init(List<PlayerData> playersData, Vector3 spawnPosition)
     {
-        players = new List<Player>();
-
+        Players = new List<Player>();
         for (int i = 0; i < playersData.Count; i++)
         {
             var playerData = playersData[i];
             var player = new Player(i, playerData.Name, playerData.Type, 0, _signalBus);
-            player.Controller = _playerFactory.Create(player, spawnPosition);
-            players.Add(player);
+            var playerController = _playerFactory.Create(player, spawnPosition);
+            player.SetController(playerController);
+            Players.Add(player);
         }
-        _signalBus.Fire(new PlayersCreatedSignal(players));
-    }
-
-    public void NextPlayer()
-    {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.Count;
+        _signalBus.Fire(new PlayersCreatedSignal(Players));
     }
 }

@@ -189,4 +189,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visual: {fileID: 7616430128873330757}
   _animation: {fileID: 5749786821036912761}
-  moveSpeed: 4
+  _moveSpeed: 4
