@@ -1,13 +1,16 @@
 using UnityEngine;
+using Zenject;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private BoardDataSO _boardData;
     [SerializeField] private PlayerDataList _playersData;
-    [SerializeField] private PlayersManager _playersManager;
-    [SerializeField] private BoardManager _boardManager;
-    [SerializeField] private TurnManager _turnManager;
     [SerializeField] private CameraMovement _cameraMovement;
+    [SerializeField] private Transform _boardTransform;
+
+    [Inject] private BoardManager _boardManager;
+    [Inject] private TurnManager _turnManager;
+    [Inject] private PlayersManager _playersManager;
 
     private void Start()
     {
@@ -23,7 +26,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        _boardManager.Init(_boardData.GetTiles());
+        _boardManager.Init(_boardData.GetTiles(), _boardTransform);
         _cameraMovement.Init(_boardData.GetBoardCenter());
         _playersManager.Init(_playersData.Entries, _boardManager.GetHomeTilePosition());
         _turnManager.Init(_playersManager, _boardManager);

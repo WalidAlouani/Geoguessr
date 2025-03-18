@@ -7,6 +7,5 @@ public class ProjectInstaller : MonoInstaller<ProjectInstaller>
         SignalBusInstaller.Install(Container);
         Container.DeclareSignal<QuizFinishedSignal>();
         Container.Bind<SceneLoader>().FromInstance(SceneLoader.Instance).AsSingle();
-        Container.Bind<IAssetLoader>().To<AddressableLoader>().AsSingle();
     }
 }

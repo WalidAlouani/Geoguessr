@@ -25,14 +25,19 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         Container.DeclareSignal<CoinsUpdateSignal>();
 
         Container.DeclareSignal<QuizRequestedSignal>();
-        
+
+        Container.Bind<PlayersManager>().AsSingle();
+        Container.BindInterfacesAndSelfTo<TurnManager>().AsSingle().NonLazy();
+        Container.BindInterfacesAndSelfTo<BoardManager>().AsSingle().NonLazy();
+
         Container.Bind<IPlayerFactory>().To<CompositePlayerFactory>().AsSingle();
         Container.BindInstance(playerPrefabMapping).IfNotBound();
 
         Container.Bind<ITileFactory>().To<CompositeTileFactory>().AsSingle();
         Container.BindInstance(tilePrefabMapping).IfNotBound();
 
-        Container.BindInterfacesAndSelfTo<TurnManager>().AsSingle();
         Container.Bind<CommandQueue>().AsSingle();
+
+        Container.Bind<IAssetLoader>().To<AddressableLoader>().AsSingle();
     }
 }

@@ -2,23 +2,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class PlayersManager : MonoBehaviour
+public class PlayersManager
 {
-    private IPlayerFactory _playerFactory;
-    private SignalBus _signalBus;
+    private readonly IPlayerFactory _playerFactory;
+    private readonly SignalBus _signalBus;
 
     public List<Player> Players { get; private set; }
 
     [Inject]
-    public void Construct(SignalBus signalBus, IPlayerFactory playerFactory)
+    public PlayersManager(SignalBus signalBus, IPlayerFactory playerFactory)
     {
-        _playerFactory = playerFactory;
         _signalBus = signalBus;
+        _playerFactory = playerFactory;
     }
 
     public void Init(List<PlayerData> playersData, Vector3 spawnPosition)
     {
         Players = new List<Player>();
+
         for (int i = 0; i < playersData.Count; i++)
         {
             var playerData = playersData[i];

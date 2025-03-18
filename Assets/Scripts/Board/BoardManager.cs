@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class BoardManager : MonoBehaviour
+public class BoardManager : IInitializable, IDisposable
 {
     private List<TileItem> _tileItems;
     private int _tilesCount;
@@ -12,33 +13,33 @@ public class BoardManager : MonoBehaviour
     private SignalBus _signalBus;
 
     [Inject]
-    public void Construct(ITileFactory tileFactory, SignalBus signalBus)
+    public BoardManager(ITileFactory tileFactory, SignalBus signalBus)
     {
         _signalBus = signalBus;
         _tileFactory = tileFactory;
     }
 
-    public void Init(List<TileData> tileDatas)
+    public void Init(List<TileData> tileDatas, Transform parent)
     {
         _tilesCount = tileDatas.Count;
-        CreateBoard(tileDatas);
+        CreateBoard(tileDatas, parent);
     }
 
-    private void OnEnable()
+    public void Initialize()
     {
         _signalBus.Subscribe<TileReachedSignal>(OnTileReached);
         _signalBus.Subscribe<TileStoppedSignal>(OnTileStopped);
         _signalBus.Subscribe<PlayersCreatedSignal>(OnPlayersCreated);
     }
 
-    private void OnDisable()
+    public void Dispose()
     {
         _signalBus.Unsubscribe<TileReachedSignal>(OnTileReached);
         _signalBus.Unsubscribe<TileStoppedSignal>(OnTileStopped);
         _signalBus.Unsubscribe<PlayersCreatedSignal>(OnPlayersCreated);
     }
 
-    private void CreateBoard(List<TileData> tileDatas)
+    private void CreateBoard(List<TileData> tileDatas, Transform parent)
     {
         _tileItems = new List<TileItem>();
         for (int i = 0; i < tileDatas.Count; i++)
@@ -46,7 +47,7 @@ public class BoardManager : MonoBehaviour
             var tileData = tileDatas[i];
             var position = new Vector3(tileData.Position.X * _multiplier, 0, tileData.Position.Y * _multiplier);
 
-            var tileItem = _tileFactory.CreateTile(tileData, position, transform);
+            var tileItem = _tileFactory.CreateTile(tileData, position, parent);
             tileItem.Init(i);
             _tileItems.Add(tileItem);
         }

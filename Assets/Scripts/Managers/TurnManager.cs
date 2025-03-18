@@ -1,21 +1,22 @@
-using UnityEngine;
+using System;
 using Zenject;
 
-public class TurnManager : MonoBehaviour
+public class TurnManager : IInitializable, IDisposable
 {
     private PlayersManager playersManager;
     private BoardManager boardManager;
 
     private SignalBus _signalBus;
-    private CommandQueue _commandQueue = new CommandQueue();
+    private CommandQueue _commandQueue;
 
     private int _currentPlayerIndex = 0;
     public Player CurrentPlayer => playersManager.Players[_currentPlayerIndex];
 
     [Inject]
-    public void Construct(SignalBus signalBus)
+    public TurnManager(SignalBus signalBus, CommandQueue commandQueue)
     {
         _signalBus = signalBus;
+        _commandQueue = commandQueue;
     }
 
     public void Init(PlayersManager playersManager, BoardManager boardManager)
@@ -27,7 +28,8 @@ public class TurnManager : MonoBehaviour
         _signalBus.Fire(new TurnStartedSignal(CurrentPlayer));
     }
 
-    private void OnEnable()
+
+    public void Initialize()
     {
         _signalBus.Subscribe<DiceRolledSignal>(OnDiceRolled);
         _signalBus.Subscribe<QuizRequestedSignal>(OnQuizRequested);
@@ -35,7 +37,8 @@ public class TurnManager : MonoBehaviour
         _commandQueue.OnQueueEmpty += OnChangeTurn;
     }
 
-    private void OnDisable()
+
+    public void Dispose()
     {
         _signalBus.Unsubscribe<DiceRolledSignal>(OnDiceRolled);
         _signalBus.Unsubscribe<QuizRequestedSignal>(OnQuizRequested);
