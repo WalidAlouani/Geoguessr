@@ -15,12 +15,15 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private bool isInside = false;
     private IPlayer currentPlayerTurn;
     private WaitForSeconds wait = new WaitForSeconds(0.02f);
+
+    private Dice _dice;
     private SignalBus _signalBus;
 
     [Inject]
-    public void Construct(SignalBus signalBus)
+    public void Construct(SignalBus signalBus, DiceFactory diceFactory)
     {
         _signalBus = signalBus;
+        _dice = diceFactory.Create(1, 10);
     }
 
     private void OnEnable()
@@ -95,10 +98,9 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
             yield return wait;
         }
 
-        var steps = Random.Range(1, 11);
-        text.text = steps.ToString();
+        var steps = _dice.Roll();
 
-        _signalBus.Fire(new DiceRolledSignal(steps));
+        text.text = steps.ToString();
     }
 
     private void OnTurnStarted(TurnStartedSignal signal)
