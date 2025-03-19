@@ -35,6 +35,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - FlagQuiz
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3ab8a536a7c5360469a568d456a2dade
+    m_Address: e2d55335-bc56-4cc1-8e3f-e29eaeecefd9
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - FlagQuiz
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: d0e9cf9704c11294991c108c1f2c5378, type: 2}
   m_SchemaSet:

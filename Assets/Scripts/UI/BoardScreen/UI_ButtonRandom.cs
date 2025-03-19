@@ -23,7 +23,7 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     public void Construct(SignalBus signalBus, DiceFactory diceFactory)
     {
         _signalBus = signalBus;
-        _dice = diceFactory.Create(1, 10);
+        _dice = diceFactory.Create(7, 7);
     }
 
     private void OnEnable()

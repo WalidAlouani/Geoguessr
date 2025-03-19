@@ -268,7 +268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -319,7 +319,11 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2097058446}
+  - {fileID: 1078214256}
+  - {fileID: 359809457}
+  - {fileID: 1647597174}
   m_Father: {fileID: 1159478441}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -378,7 +382,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 0.23529412}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1093,7 +1097,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1159478441}
+    m_TransformParent: {fileID: 363599858}
     m_Modifications:
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
@@ -1178,7 +1182,7 @@ PrefabInstance:
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 376
+      value: 1729.0001
       objectReference: {fileID: 0}
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
@@ -1346,7 +1350,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1422,7 +1426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.5686275, g: 0.909804, b: 0.9803922, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1917,10 +1921,6 @@ RectTransform:
   - {fileID: 864312702}
   - {fileID: 363599858}
   - {fileID: 1178112335}
-  - {fileID: 2097058446}
-  - {fileID: 1078214256}
-  - {fileID: 359809457}
-  - {fileID: 1647597174}
   m_Father: {fileID: 1061662809}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -2728,7 +2728,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3103,7 +3103,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1159478441}
+    m_TransformParent: {fileID: 363599858}
     m_Modifications:
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
@@ -3188,7 +3188,7 @@ PrefabInstance:
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 376
+      value: 1729.0001
       objectReference: {fileID: 0}
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
@@ -3270,7 +3270,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1616375571
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3593,7 +3593,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1159478441}
+    m_TransformParent: {fileID: 363599858}
     m_Modifications:
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
@@ -3678,7 +3678,7 @@ PrefabInstance:
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 730.5
+      value: 2083.5
       objectReference: {fileID: 0}
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
@@ -3844,7 +3844,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1159478441}
+    m_TransformParent: {fileID: 363599858}
     m_Modifications:
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
@@ -3929,7 +3929,7 @@ PrefabInstance:
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 730.5
+      value: 2083.5
       objectReference: {fileID: 0}
     - target: {fileID: 140866908372919372, guid: 0deed240584e85f42b1055cc80ef3cf7,
         type: 3}

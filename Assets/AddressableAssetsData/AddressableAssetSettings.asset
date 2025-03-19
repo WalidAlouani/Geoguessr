@@ -92,6 +92,7 @@ MonoBehaviour:
     - default
     - FlagQuiz
     - TextQuiz
+    - Flags
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: d60beb7ecddda23498e0659f6e990ac7, type: 2}

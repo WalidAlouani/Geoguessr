@@ -1,0 +1,25 @@
+{
+  "ID": "e2d55335-bc56-4cc1-8e3f-e29eaeecefd9",
+  "QuestionType": 1,
+  "Question": "Which flag belongs to Danemark?",
+  "CustomImageID": null,
+  "Answers": [
+    {
+      "ImageID": "se",
+      "Text": null
+    },
+    {
+      "ImageID": "dk",
+      "Text": null
+    },
+    {
+      "ImageID": "fi",
+      "Text": null
+    },
+    {
+      "ImageID": "is",
+      "Text": null
+    }
+  ],
+  "CorrectAnswerIndex": 1
+}
