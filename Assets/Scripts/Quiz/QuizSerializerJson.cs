@@ -10,14 +10,14 @@ public class QuizSerializerJson : IDataSerializer<QuizData>
     {
         string json = JsonConvert.SerializeObject(level);
         File.WriteAllText(path, json);
-        Debug.Log($"Saved level: {path}");
+        Debug.Log($"Saved quiz: {path}");
     }
 
     public QuizData Load(string path)
     {
         if (!File.Exists(path))
         {
-            Debug.LogWarning($"Level to load not found: {path}");
+            Debug.LogWarning($"Quiz to load not found: {path}");
             return null;
         }
 

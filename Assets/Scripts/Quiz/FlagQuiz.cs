@@ -1,18 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class FlagQuiz : QuizDataBase<Sprite>
 {
     public string CorrectCountryName;
 
-    public static async Task<FlagQuiz> CreateAsync(QuizData quizData, IAssetLoader assetLoader, ICountryCodeLookup countryCodeLookup)
+    public static async UniTask<FlagQuiz> CreateAsync(QuizData quizData, IAssetLoader assetLoader, ICountryCodeLookup countryCodeLookup)
     {
         var instance = new FlagQuiz(quizData);
         await instance.InitializeAsync(quizData, assetLoader, countryCodeLookup);
         return instance;
     }
 
-    private async Task InitializeAsync(QuizData quizData, IAssetLoader assetLoader, ICountryCodeLookup countryCodeLookup)
+    private async UniTask InitializeAsync(QuizData quizData, IAssetLoader assetLoader, ICountryCodeLookup countryCodeLookup)
     {
         var answersCount = quizData.Answers.Count;
         Answers = new Sprite[answersCount];

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using UnityEngine;
 using Zenject;
+using Cysharp.Threading.Tasks;
+using System;
 
 public class PlayerAI : IPlayer
 {
@@ -31,20 +31,12 @@ public class PlayerAI : IPlayer
 
     public async void TurnStarted()
     {
-        Debug.Log("Now it is player " + Index + "'s turn.");
-        try
-        {
-            await Task.Delay(2000, _cts.Token);
-            _signalBus.Fire(new RollDiceSignal(this));
-        }
-        catch (OperationCanceledException)
-        {
-            Debug.Log("TurnStarted operation was canceled.");
-        }
+        await ThrowDice(_cts.Token);
     }
 
     public void TurnEnded()
     {
+        //Debug.Log("Now it is player " + Index + "'s turn.");
     }
 
     public void AddCoins(int coinAmount)
@@ -56,10 +48,24 @@ public class PlayerAI : IPlayer
     public void CancelTurnOperation()
     {
         _cts.Cancel();
+        _cts.Dispose();
     }
 
     public void Dispose()
     {
         CancelTurnOperation();
+    }
+
+    public async UniTask ThrowDice(CancellationToken token)
+    {
+        try
+        {
+            await UniTask.Delay(2000, cancellationToken: token);
+            _signalBus.Fire(new RollDiceSignal(this));
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("ThrowDice operation was canceled.");
+        }
     }
 }

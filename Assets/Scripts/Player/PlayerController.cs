@@ -4,6 +4,9 @@ using System.Collections;
 using Zenject;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 public enum PlayerState { Idle, Moving }
 
@@ -17,11 +20,11 @@ public class PlayerController : MonoBehaviour
     public int CurrentTileIndex { get; private set; }
 
     public event Action<PlayerState> OnStateChange;
-    public event Action OnMoveComplete;
 
     protected IPlayer _player;
     protected PlayerState _state;
     protected SignalBus _signalBus;
+    protected CancellationToken _token;
 
     [Inject]
     public void Construct(SignalBus signalBus)
@@ -36,31 +39,38 @@ public class PlayerController : MonoBehaviour
         visual.Init(Index);
         _animation.Init();
         SetState(PlayerState.Idle);
+        _token = this.GetCancellationTokenOnDestroy();
     }
 
-    public void MoveSteps(List<Vector3> steps)
+    public async UniTask MoveSteps(List<Vector3> steps)
     {
-        StopAllCoroutines();
-        StartCoroutine(MoveToTile(steps));
+        try
+        {
+            await MoveToTile(steps, _token);
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("MoveSteps operation was canceled.");
+        }
     }
 
-    private IEnumerator MoveToTile(List<Vector3> steps)
+    private async UniTask MoveToTile(List<Vector3> steps, CancellationToken token)
     {
         SetState(PlayerState.Moving);
         _animation.PlayLoopingRotation(false);
 
         for (int i = 0; i < steps.Count; i++)
         {
-
             Vector3 startPos = transform.position;
             Vector3 endPos = steps[i];
             float journey = 0f;
             while (journey < 1f)
             {
+                token.ThrowIfCancellationRequested();
                 journey += Time.deltaTime * _moveSpeed;
                 transform.position = Vector3.Lerp(startPos, endPos, journey);
                 _animation.UpdateMovingTime(journey);
-                yield return null;
+                await UniTask.Yield();
             }
 
             CurrentTileIndex++;
@@ -72,8 +82,6 @@ public class PlayerController : MonoBehaviour
         _animation.PlayLoopingRotation(true);
 
         _signalBus.Fire(new TileStoppedSignal(_player, CurrentTileIndex));
-
-        OnMoveComplete?.Invoke();
     }
 
     public void TeleportTo(List<Vector3> steps)
@@ -82,15 +90,14 @@ public class PlayerController : MonoBehaviour
         CurrentTileIndex += steps.Count;
 
         _signalBus.Fire(new TileStoppedSignal(_player, CurrentTileIndex));
-        OnMoveComplete?.Invoke();
     }
 
     private void SetState(PlayerState state)
     {
-        if (this._state == state)
+        if (_state == state)
             return;
 
-        this._state = state;
+        _state = state;
         OnStateChange?.Invoke(state);
     }
 }

@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class QuizTextManager : QuizManagerBase<TextQuiz, string>
@@ -7,7 +7,7 @@ public class QuizTextManager : QuizManagerBase<TextQuiz, string>
 
     protected override IQuizUIManager<TextQuiz, string> UIQuizManager => uI_QuizManager;
 
-    protected override async Task<TextQuiz> CreateQuizAsync(QuizData quizData)
+    protected override async UniTask<TextQuiz> CreateQuizAsync(QuizData quizData)
     {
         return await TextQuiz.CreateAsync(quizData, _assetLoader);
     }

@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,20 +13,26 @@ public class SceneLoader : Singleton<SceneLoader>
     [SerializeField] private float fadeInDuration = 0.5f;
     [SerializeField] private float fadeOutDuration = 0.5f;
     private string levelName;
+    private CancellationToken _token;
+
+    private void Start()
+    {
+        _token = this.GetCancellationTokenOnDestroy();
+    }
 
     public void LoadScene(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
     {
         this.levelName = sceneName;
-        StartCoroutine(LoadLevelAsync(loadSceneMode));
+        LoadLevelAsync(loadSceneMode).Forget();
     }
 
     public void UnloadScene(string sceneName)
     {
         this.levelName = sceneName;
-        StartCoroutine(UnloadLevelAsync());
+        UnloadLevelAsync().Forget();
     }
 
-    IEnumerator LoadLevelAsync(LoadSceneMode loadSceneMode)
+    private async UniTaskVoid LoadLevelAsync(LoadSceneMode loadSceneMode)
     {
         loadingScreen.SetActive(true);
         
@@ -34,16 +42,18 @@ public class SceneLoader : Singleton<SceneLoader>
         float timer = 0f;
         while (timer < fakeProgressDuration)
         {
+            _token.ThrowIfCancellationRequested();
             timer += Time.deltaTime;
-            yield return null;
+            await UniTask.Yield(_token);
         }
 
         AsyncOperation operation = SceneManager.LoadSceneAsync(levelName, loadSceneMode);
 
         while (!operation.isDone)
         {
+            _token.ThrowIfCancellationRequested();
             float progress = Mathf.Clamp01(operation.progress / 1f);
-            yield return null;
+            await UniTask.Yield(_token);
         }
 
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(levelName)); // Make the new scene active
@@ -54,7 +64,7 @@ public class SceneLoader : Singleton<SceneLoader>
             .OnComplete(()=> loadingScreen.SetActive(false));
     }
 
-    IEnumerator UnloadLevelAsync()
+    private async UniTaskVoid UnloadLevelAsync()
     {
         loadingScreen.SetActive(true);
 
@@ -64,16 +74,18 @@ public class SceneLoader : Singleton<SceneLoader>
         float timer = 0f;
         while (timer < fakeProgressDuration)
         {
+            _token.ThrowIfCancellationRequested();
             timer += Time.deltaTime;
-            yield return null;
+            await UniTask.Yield(_token);
         }
 
         AsyncOperation operation = SceneManager.UnloadSceneAsync(levelName);
 
         while (!operation.isDone)
         {
+            _token.ThrowIfCancellationRequested();
             float progress = Mathf.Clamp01(operation.progress / 1f);
-            yield return null;
+            await UniTask.Yield(_token);
         }
 
         loadingScreen

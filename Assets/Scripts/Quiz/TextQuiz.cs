@@ -1,18 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class TextQuiz : QuizDataBase<string>
 {
     public Sprite ReferenceImage;
 
-    public static async Task<TextQuiz> CreateAsync(QuizData quizData, IAssetLoader assetLoader)
+    public static async UniTask<TextQuiz> CreateAsync(QuizData quizData, IAssetLoader assetLoader)
     {
         var instance = new TextQuiz(quizData);
         await instance.InitializeAsync(quizData, assetLoader);
         return instance;
     }
 
-    private async Task InitializeAsync(QuizData quizData, IAssetLoader assetLoader)
+    private async UniTask InitializeAsync(QuizData quizData, IAssetLoader assetLoader)
     {
         ReferenceImage = await assetLoader.LoadAssetAsync<Sprite>(quizData.CustomImageID);
     }

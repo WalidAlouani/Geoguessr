@@ -1,5 +1,5 @@
+using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -7,10 +7,10 @@ using UnityEngine.ResourceManagement.ResourceLocations;
 
 public class RandomResourceKeyPicker
 {
-    public static async Task<string> GetRandomResourceKeyAsync(AssetLabelReference jsonLabel)
+    public static async UniTask<string> GetRandomResourceKeyAsync(AssetLabelReference jsonLabel)
     {
         AsyncOperationHandle<IList<IResourceLocation>> locationsHandle = Addressables.LoadResourceLocationsAsync(jsonLabel);
-        await locationsHandle.Task;
+        await locationsHandle.ToUniTask();
 
         if (locationsHandle.Status != AsyncOperationStatus.Succeeded)
         {

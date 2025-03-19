@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
@@ -37,7 +37,7 @@ public abstract class QuizManagerBase<TQuiz, TData> : MonoBehaviour
         UIQuizManager.Initialize(this, quiz);
     }
 
-    protected abstract Task<TQuiz> CreateQuizAsync(QuizData quizData);
+    protected abstract UniTask<TQuiz> CreateQuizAsync(QuizData quizData);
 
     public void OnQuizFinished(QuizResult quizResult)
     {

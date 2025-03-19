@@ -14,15 +14,14 @@ public class MoveCommand : ICommand
         this.commandQueue = queue;
     }
 
-    public void Execute()
+    public async void Execute()
     {
-        player.Controller.OnMoveComplete += OnCommandFinished;
-        player.Controller.MoveSteps(steps);
+        await player.Controller.MoveSteps(steps);
+        OnCommandFinished();
     }
 
     private void OnCommandFinished()
     {
-        player.Controller.OnMoveComplete -= OnCommandFinished;
         commandQueue.CommandFinished();
     }
 }

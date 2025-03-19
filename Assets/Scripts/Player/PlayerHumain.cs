@@ -27,7 +27,7 @@ public class PlayerHumain : IPlayer
 
     public void TurnStarted()
     {
-        Debug.Log("Now it is player " + Index + "'s turn.");
+        //Debug.Log("Now it is player " + Index + "'s turn.");
     }
 
     public void TurnEnded()

@@ -12,6 +12,6 @@ public class CoinRewardEvent : TileEvent
 
         signalBus.Fire(new CoinsAddedSignal(player, tile.transform.position, coinAmount));
 
-        Debug.Log($"{player.Name} received {coinAmount} coins.");
+        //Debug.Log($"{player.Name} received {coinAmount} coins.");
     }
 }

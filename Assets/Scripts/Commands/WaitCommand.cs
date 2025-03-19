@@ -1,33 +1,49 @@
+using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
+using System.Threading;
 using UnityEngine;
 
 public class WaitCommand : ICommand
 {
     private IPlayer player;
-    private float time;
+    private int timeMs;
     private CommandQueue commandQueue;
+    private CancellationTokenSource _cts = new CancellationTokenSource();
 
-    public WaitCommand(IPlayer player, float time, CommandQueue queue)
+    public WaitCommand(IPlayer player, float timeS, CommandQueue queue)
     {
         this.player = player;
-        this.time = time;
+        this.timeMs = (int)(timeS * 1000);
         this.commandQueue = queue;
+        Application.quitting += OnApplicationQuit;
     }
 
     public void Execute()
     {
-        player.Controller.StartCoroutine(Wait());
+        Wait().Forget();
     }
 
-    private IEnumerator Wait()
+    private async UniTaskVoid Wait()
     {
-        yield return new WaitForSeconds(time);
-        OnCommandFinished();
+        try
+        {
+            await UniTask.Delay(timeMs, cancellationToken: _cts.Token);
+            OnCommandFinished();
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("Wait operation was canceled.");
+        }
     }
 
     private void OnCommandFinished()
     {
         commandQueue.CommandFinished();
+    }
+
+    private void OnApplicationQuit()
+    {
+        _cts.Cancel();
+        _cts.Dispose();
     }
 }

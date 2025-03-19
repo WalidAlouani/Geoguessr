@@ -2,14 +2,14 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 
 public class AddressableLoader: IAssetLoader
 {
     private readonly Dictionary<string, AsyncOperationHandle> loadedAssetHandles = new Dictionary<string, AsyncOperationHandle>();
 
-    public async Task<T> LoadAssetAsync<T>(string assetId) where T : Object
+    public async UniTask<T> LoadAssetAsync<T>(string assetId) where T : Object
     {
         if (loadedAssetHandles.TryGetValue(assetId, out AsyncOperationHandle existingHandle))
         {
@@ -25,9 +25,9 @@ public class AddressableLoader: IAssetLoader
             }
         }
 
-        Debug.Log($"[AddressableLoader] Loading asset '{assetId}' of type '{typeof(T).Name}' from Addressables.");
+        //Debug.Log($"[AddressableLoader] Loading asset '{assetId}' of type '{typeof(T).Name}' from Addressables.");
         AsyncOperationHandle<T> handle = Addressables.LoadAssetAsync<T>(assetId);
-        await handle.Task; // Wait for the asset to load
+        await handle.ToUniTask(); // Wait for the asset to load
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
@@ -49,7 +49,7 @@ public class AddressableLoader: IAssetLoader
             if (handle.IsValid())
             {
                 Addressables.Release(handle);
-                Debug.Log($"[AddressableLoader] Released Addressable asset '{assetId}'.");
+                //Debug.Log($"[AddressableLoader] Released Addressable asset '{assetId}'.");
             }
             else
             {

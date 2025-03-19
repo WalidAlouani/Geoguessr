@@ -24,8 +24,8 @@ public class TurnManager : IInitializable, IDisposable
 
     public void Init(PlayersManager playersManager, BoardManager boardManager)
     {
-        this._playersManager = playersManager;
-        this._boardManager = boardManager;
+        _playersManager = playersManager;
+        _boardManager = boardManager;
 
         CurrentPlayer.TurnStarted();
         _signalBus.Fire(new TurnStartedSignal(CurrentPlayer));
