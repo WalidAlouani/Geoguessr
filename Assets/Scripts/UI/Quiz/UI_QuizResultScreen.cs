@@ -34,7 +34,11 @@ public class UI_QuizResultScreen : MonoBehaviour
         }
 
         correctAnswerText.text = quizData.Answers[quizData.CorrectAnswerIndex];
-        continueButton.onClick.AddListener(() => quizManager.OnQuizFinished(quizResult));
+        continueButton.onClick.AddListener(() =>
+        {
+            quizManager.OnQuizFinished(quizResult);
+            continueButton.onClick.RemoveAllListeners();
+        });
 
         StartCoroutine(ShowTapToContinue());
     }

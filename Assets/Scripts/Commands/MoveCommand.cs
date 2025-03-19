@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class MoveCommand : ICommand
 {
-    private Player player;
+    private IPlayer player;
     private List<Vector3> steps;
     private CommandQueue commandQueue;
 
-    public MoveCommand(Player player, List<Vector3> steps, CommandQueue queue)
+    public MoveCommand(IPlayer player, List<Vector3> steps, CommandQueue queue)
     {
         this.player = player;
         this.steps = steps;

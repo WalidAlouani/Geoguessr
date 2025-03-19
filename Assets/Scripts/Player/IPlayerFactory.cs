@@ -2,5 +2,5 @@ using UnityEngine;
 
 public interface IPlayerFactory
 {
-    PlayerController Create(Player playerData, Vector3 initialPosition);
+    PlayerController Create(IPlayer playerData, Vector3 initialPosition);
 }

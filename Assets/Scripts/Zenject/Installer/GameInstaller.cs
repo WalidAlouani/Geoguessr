@@ -16,8 +16,6 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         Container.DeclareSignal<TurnStartedSignal>();
         Container.DeclareSignal<TurnEndedSignal>();
 
-        Container.DeclareSignal<PlayerStartMoveSignal>();
-
         Container.DeclareSignal<TileReachedSignal>();
         Container.DeclareSignal<TileStoppedSignal>();
 
@@ -26,7 +24,7 @@ public class GameInstaller : MonoInstaller<GameInstaller>
 
         Container.DeclareSignal<QuizRequestedSignal>();
 
-        Container.Bind<PlayersManager>().AsSingle();
+        Container.BindInterfacesAndSelfTo<PlayersManager>().AsSingle();
         Container.BindInterfacesAndSelfTo<TurnManager>().AsSingle().NonLazy();
         Container.BindInterfacesAndSelfTo<BoardManager>().AsSingle().NonLazy();
 

@@ -7,7 +7,7 @@ public class QuizEvent : TileEvent
     public QuizType quizType;
     public string sceneName;
 
-    public override void Execute(TileItem tile, Player player, SignalBus signalBus)
+    public override void Execute(TileItem tile, IPlayer player, SignalBus signalBus)
     {
         signalBus.Fire(new QuizRequestedSignal(player, tile, quizType, sceneName));
     }

@@ -1,9 +1,9 @@
 public class TileReachedSignal
 {
-    public Player Player { get; private set; }
+    public IPlayer Player { get; private set; }
     public int TileIndex { get; private set; }
 
-    public TileReachedSignal(Player player, int tileIndex)
+    public TileReachedSignal(IPlayer player, int tileIndex)
     {
         Player = player;
         TileIndex = tileIndex;

@@ -13,6 +13,7 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] private TMP_Text text;
 
     private bool isInside = false;
+    private IPlayer currentPlayerTurn;
     private WaitForSeconds wait = new WaitForSeconds(0.02f);
     private SignalBus _signalBus;
 
@@ -49,7 +50,7 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
         if (!button.interactable)
             return;
 
-        _signalBus.Fire<RollDiceSignal>();
+        _signalBus.Fire(new RollDiceSignal(currentPlayerTurn));
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -102,9 +103,10 @@ public class UI_ButtonRandom : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     private void OnTurnStarted(TurnStartedSignal signal)
     {
+        currentPlayerTurn = signal.Player;
         SetState(true);
 
-        if (signal.Player.Type == PlayerType.Humain)
+        if (signal.Player is PlayerHumain)
             button.interactable = true;
     }
 }

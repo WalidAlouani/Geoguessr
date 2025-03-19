@@ -81,6 +81,18 @@ public class BoardManager : IInitializable, IDisposable
         return path;
     }
 
+    public List<Vector3> GetTilesForPlayerMovement(int playerIndex, TileItem destination)
+    {
+        int currentTileIndex = _playerTilePositions[playerIndex];
+        List<Vector3> path = new List<Vector3>();
+
+        for (int i = currentTileIndex + 1; i <= destination.Index; i++)
+        {
+            path.Add(GetTilePosition(i));
+        }
+        return path;
+    }
+
     public Vector3 GetPlayerPosition(int playerIndex)
     {
         return GetTilePosition(_playerTilePositions[playerIndex]);

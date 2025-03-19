@@ -10,7 +10,7 @@ public class TurnManager : IInitializable, IDisposable
     private CommandQueue _commandQueue;
 
     private int _currentPlayerIndex = 0;
-    public Player CurrentPlayer => playersManager.Players[_currentPlayerIndex];
+    public IPlayer CurrentPlayer => playersManager.Players[_currentPlayerIndex];
 
     [Inject]
     public TurnManager(SignalBus signalBus, CommandQueue commandQueue)
@@ -49,7 +49,6 @@ public class TurnManager : IInitializable, IDisposable
     public void OnDiceRolled(DiceRolledSignal signal)
     {
         var tiles = boardManager.GetTilesForPlayerMovement(CurrentPlayer.Index, signal.Steps);
-        _signalBus.Fire(new PlayerStartMoveSignal(CurrentPlayer));
 
         var waitCommand = new WaitCommand(CurrentPlayer, 1, _commandQueue);
         _commandQueue.EnqueueCommand(waitCommand);

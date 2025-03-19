@@ -6,7 +6,7 @@ public class CoinRewardEvent : TileEvent
 {
     public int coinAmount = 1000;
 
-    public override void Execute(TileItem tile, Player player, SignalBus signalBus)
+    public override void Execute(TileItem tile, IPlayer player, SignalBus signalBus)
     {
         player.AddCoins(coinAmount);
 

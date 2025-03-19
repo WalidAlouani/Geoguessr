@@ -4,5 +4,5 @@ using Zenject;
 
 public abstract class TileEvent: ScriptableObject
 {
-    public abstract void Execute(TileItem tile, Player player, SignalBus signalBus);
+    public abstract void Execute(TileItem tile, IPlayer player, SignalBus signalBus);
 }

@@ -1,8 +1,8 @@
 public class PlayerStartMoveSignal
 {
-    public Player Player { get; private set; }
+    public IPlayer Player { get; private set; }
 
-    public PlayerStartMoveSignal(Player player)
+    public PlayerStartMoveSignal(IPlayer player)
     {
         Player = player;
     }

@@ -1,19 +1,22 @@
 public class TeleportCommand : ICommand
 {
-    private PlayerController player;
+    private IPlayer player;
     private TileItem toTile;
+    private BoardManager boardManager;
     private CommandQueue commandQueue;
 
-    public TeleportCommand(PlayerController player, TileItem toTile, CommandQueue queue)
+    public TeleportCommand(IPlayer player, TileItem toTile, BoardManager boardManager, CommandQueue queue)
     {
         this.player = player;
         this.toTile = toTile;
+        this.boardManager = boardManager;
         this.commandQueue = queue;
     }
 
     public void Execute()
     {
-        player.Teleport(toTile);
+        var path = boardManager.GetTilesForPlayerMovement(player.Index, toTile);
+        player.Controller.TeleportTo(path);
         commandQueue.CommandFinished();
     }
 }

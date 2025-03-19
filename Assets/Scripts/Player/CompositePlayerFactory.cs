@@ -13,7 +13,7 @@ public class CompositePlayerFactory : IPlayerFactory
         _playerPrefabMapping = playerPrefabMapping;
     }
 
-    public PlayerController Create(Player playerData, Vector3 initialPosition)
+    public PlayerController Create(IPlayer playerData, Vector3 initialPosition)
     {
         var entry = _playerPrefabMapping.entries.Find(e => e.playerType == playerData.Type);
         if (entry == null)

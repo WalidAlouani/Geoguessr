@@ -1,7 +1,7 @@
-﻿using System;
+﻿using UnityEngine;
 using Zenject;
 
-public class Player
+public class PlayerHumain : IPlayer
 {
     public int Index { get; }
     public string Name { get;}
@@ -11,7 +11,7 @@ public class Player
 
     private readonly SignalBus _signalBus;
 
-    public Player(int index, string name, PlayerType type, int coins, SignalBus signalBus)
+    public PlayerHumain(PlayerType type, int index, string name, int coins, SignalBus signalBus)
     {
         Index = index;
         Name = name;
@@ -27,7 +27,7 @@ public class Player
 
     public void TurnStarted()
     {
-        Controller.TurnStarted();
+        Debug.Log("Now it is player " + Index + "'s turn.");
     }
 
     public void TurnEnded()
@@ -38,5 +38,9 @@ public class Player
     {
         Coins += coinAmount;
         _signalBus.Fire(new CoinsUpdateSignal(this));
+    }
+
+    public void Dispose()
+    {
     }
 }

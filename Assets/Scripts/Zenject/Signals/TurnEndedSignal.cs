@@ -1,8 +1,8 @@
 public class TurnEndedSignal
 {
-    public Player Player { get; private set; }
+    public IPlayer Player { get; private set; }
 
-    public TurnEndedSignal(Player player)
+    public TurnEndedSignal(IPlayer player)
     {
         Player = player;
     }

@@ -34,11 +34,11 @@ public class CameraMovement : MonoBehaviour
     private void OnEnable()
     {
         inputHandler.OnDragUpdateEvent += OnDragUpdate;
-        _signalBus.Subscribe<PlayerStartMoveSignal>(OnTurnStarted);
+        _signalBus.Subscribe<RollDiceSignal>(OnRollDice);
         _signalBus.Subscribe<TurnEndedSignal>(OnTurnEnded);
     }
 
-    private void OnTurnStarted(PlayerStartMoveSignal signal)
+    private void OnRollDice(RollDiceSignal signal)
     {
         target = signal.Player.Controller.transform;
     }
@@ -51,7 +51,7 @@ public class CameraMovement : MonoBehaviour
     private void OnDisable()
     {
         inputHandler.OnDragUpdateEvent -= OnDragUpdate;
-        _signalBus.Unsubscribe<PlayerStartMoveSignal>(OnTurnStarted);
+        _signalBus.Unsubscribe<RollDiceSignal>(OnRollDice);
         _signalBus.Unsubscribe<TurnEndedSignal>(OnTurnEnded);
     }
 

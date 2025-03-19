@@ -36,7 +36,11 @@ public class UI_QuizFlagResultScreen : MonoBehaviour
 
         correctAnswerImage.sprite = quizData.Answers[quizData.CorrectAnswerIndex];
         correctAnswerText.text = quizData.CorrectCountryName;
-        continueButton.onClick.AddListener(() => quizManager.OnQuizFinished(quizResult));
+        continueButton.onClick.AddListener(() => 
+        { 
+            quizManager.OnQuizFinished(quizResult);
+            continueButton.onClick.RemoveAllListeners();
+        });
 
         StartCoroutine(ShowTapToContinue());
     }

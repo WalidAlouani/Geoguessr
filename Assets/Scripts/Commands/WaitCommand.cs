@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class WaitCommand : ICommand
 {
-    private Player player;
+    private IPlayer player;
     private float time;
     private CommandQueue commandQueue;
 
-    public WaitCommand(Player player, float time, CommandQueue queue)
+    public WaitCommand(IPlayer player, float time, CommandQueue queue)
     {
         this.player = player;
         this.time = time;

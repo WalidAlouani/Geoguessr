@@ -25,12 +25,12 @@ public class TileItem : MonoBehaviour
         _animation.PlayStartAnimation(index);
     }
 
-    public void TriggerOnStopEvent(Player player)
+    public void TriggerOnStopEvent(IPlayer player)
     {
         OnStopEvent?.Execute(this, player, _signalBus);
     }
 
-    public void TriggerOnReachEvent(Player player)
+    public void TriggerOnReachEvent(IPlayer player)
     {
         _animation.PlayStepOnAnimation();
         OnReachEvent?.Execute(this, player, _signalBus);

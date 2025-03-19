@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using Zenject;
 using System.Collections.Generic;
+using System.Linq;
 
 public enum PlayerState { Idle, Moving }
 
@@ -15,12 +16,10 @@ public class PlayerController : MonoBehaviour
     public int Index { get; private set; }
     public int CurrentTileIndex { get; private set; }
 
-
     public event Action<PlayerState> OnStateChange;
-    public event Action<int> OnTileReached;
     public event Action OnMoveComplete;
 
-    protected Player _player;
+    protected IPlayer _player;
     protected PlayerState _state;
     protected SignalBus _signalBus;
 
@@ -30,7 +29,7 @@ public class PlayerController : MonoBehaviour
         _signalBus = signalBus;
     }
 
-    public void Init(Player player)
+    public void Init(IPlayer player)
     {
         _player = player;
         Index = player.Index;
@@ -52,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
         for (int i = 0; i < steps.Count; i++)
         {
-            
+
             Vector3 startPos = transform.position;
             Vector3 endPos = steps[i];
             float journey = 0f;
@@ -77,16 +76,13 @@ public class PlayerController : MonoBehaviour
         OnMoveComplete?.Invoke();
     }
 
-    public virtual void TurnStarted()
+    public void TeleportTo(List<Vector3> steps)
     {
-        Debug.Log("Now it is player " + Index + "'s turn.");
-    }
+        transform.position = steps.Last();
+        CurrentTileIndex += steps.Count;
 
-    public void Teleport(TileItem toTile)
-    {
-        transform.position = toTile.transform.position;
-        CurrentTileIndex = toTile.Index;
-        OnTileReached?.Invoke(CurrentTileIndex);
+        _signalBus.Fire(new TileStoppedSignal(_player, CurrentTileIndex));
+        OnMoveComplete?.Invoke();
     }
 
     private void SetState(PlayerState state)
@@ -97,5 +93,4 @@ public class PlayerController : MonoBehaviour
         this._state = state;
         OnStateChange?.Invoke(state);
     }
-
 }
