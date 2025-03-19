@@ -1,28 +1,31 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 using Zenject;
 
 public class TurnManager : IInitializable, IDisposable
 {
-    private PlayersManager playersManager;
-    private BoardManager boardManager;
+    private PlayersManager _playersManager;
+    private BoardManager _boardManager;
 
     private SignalBus _signalBus;
     private CommandQueue _commandQueue;
-
+    private ITurnCommandProcessor _commandProcessor;
     private int _currentPlayerIndex = 0;
-    public IPlayer CurrentPlayer => playersManager.Players[_currentPlayerIndex];
+    public IPlayer CurrentPlayer => _playersManager.Players[_currentPlayerIndex];
 
     [Inject]
-    public TurnManager(SignalBus signalBus, CommandQueue commandQueue)
+    public TurnManager(SignalBus signalBus, CommandQueue commandQueue, ITurnCommandProcessor commandProcessor)
     {
         _signalBus = signalBus;
         _commandQueue = commandQueue;
+        _commandProcessor = commandProcessor;
     }
 
     public void Init(PlayersManager playersManager, BoardManager boardManager)
     {
-        this.playersManager = playersManager;
-        this.boardManager = boardManager;
+        this._playersManager = playersManager;
+        this._boardManager = boardManager;
 
         CurrentPlayer.TurnStarted();
         _signalBus.Fire(new TurnStartedSignal(CurrentPlayer));
@@ -37,7 +40,6 @@ public class TurnManager : IInitializable, IDisposable
         _commandQueue.OnQueueEmpty += OnChangeTurn;
     }
 
-
     public void Dispose()
     {
         _signalBus.Unsubscribe<DiceRolledSignal>(OnDiceRolled);
@@ -46,34 +48,23 @@ public class TurnManager : IInitializable, IDisposable
         _commandQueue.OnQueueEmpty -= OnChangeTurn;
     }
 
-    public void OnDiceRolled(DiceRolledSignal signal)
+    private void OnDiceRolled(DiceRolledSignal signal)
     {
-        var tiles = boardManager.GetTilesForPlayerMovement(CurrentPlayer.Index, signal.Steps);
-
-        var waitCommand = new WaitCommand(CurrentPlayer, 1, _commandQueue);
-        _commandQueue.EnqueueCommand(waitCommand);
-
-        var moveCommand = new MoveCommand(CurrentPlayer, tiles, _commandQueue);
-        _commandQueue.EnqueueCommand(moveCommand);
-
-        _commandQueue.EnqueueCommand(waitCommand);
+        List<Vector3> tiles = _boardManager.GetTilesForPlayerMovement(CurrentPlayer.Index, signal.Steps);
+        _commandProcessor.ProcessDiceRoll(CurrentPlayer, tiles);
     }
 
     private void OnQuizRequested(QuizRequestedSignal signal)
     {
-        var quizCommand = new QuizCommand(signal.QuizType, signal.SceneName);
-        _commandQueue.EnqueueCommand(quizCommand);
-
-        var waitCommand = new WaitCommand(CurrentPlayer, 1, _commandQueue);
-        _commandQueue.EnqueueCommand(waitCommand);
+        _commandProcessor.ProcessQuizRequest(CurrentPlayer, signal.QuizType, signal.SceneName);
     }
 
     private void OnQuizFinished(QuizFinishedSignal signal)
     {
-        _commandQueue.CommandFinished();
+        _commandProcessor.ProcessQuizFinished();
 
         CurrentPlayer.AddCoins(signal.CoinAmount);
-        var position = boardManager.GetPlayerPosition(CurrentPlayer.Index);
+        var position = _boardManager.GetPlayerPosition(CurrentPlayer.Index);
         _signalBus.Fire(new CoinsAddedSignal(CurrentPlayer, position, signal.CoinAmount));
     }
 
@@ -82,7 +73,7 @@ public class TurnManager : IInitializable, IDisposable
         CurrentPlayer.TurnEnded();
         _signalBus.Fire(new TurnEndedSignal(CurrentPlayer));
 
-        _currentPlayerIndex = (_currentPlayerIndex + 1) % playersManager.Players.Count;
+        _currentPlayerIndex = (_currentPlayerIndex + 1) % _playersManager.Players.Count;
 
         CurrentPlayer.TurnStarted();
         _signalBus.Fire(new TurnStartedSignal(CurrentPlayer));

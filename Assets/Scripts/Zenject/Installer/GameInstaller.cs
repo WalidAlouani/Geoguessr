@@ -39,5 +39,6 @@ public class GameInstaller : MonoInstaller<GameInstaller>
         Container.BindFactory<int, int, Dice, DiceFactory>().AsTransient();
 
         Container.Bind<IAssetLoader>().To<AddressableLoader>().AsSingle();
+        Container.Bind<ITurnCommandProcessor>().To<TurnCommandProcessor>().AsSingle();
     }
 }
