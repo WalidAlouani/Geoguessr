@@ -3,6 +3,3 @@
 {
     void Initialize(QuizManagerBase<TQuiz, TData> quizManager, TQuiz quiz);
 }
-
-
-
