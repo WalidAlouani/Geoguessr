@@ -4,28 +4,28 @@ using UnityEngine;
 
 public class TurnCommandProcessor : ITurnCommandProcessor
 {
-    private readonly CommandQueue _commandQueue;
+    public CommandQueue CommandQueue { get; }
 
     public TurnCommandProcessor(CommandQueue commandQueue)
     {
-        _commandQueue = commandQueue;
+        CommandQueue = commandQueue;
     }
 
     public void ProcessDiceRoll(IPlayer player, List<Vector3> tiles)
     {
-        _commandQueue.EnqueueCommand(new WaitCommand(player, 1, _commandQueue));
-        _commandQueue.EnqueueCommand(new MoveCommand(player, tiles, _commandQueue));
-        _commandQueue.EnqueueCommand(new WaitCommand(player, 1, _commandQueue));
+        CommandQueue.EnqueueCommand(new WaitCommand(player, 1, CommandQueue));
+        CommandQueue.EnqueueCommand(new MoveCommand(player, tiles, CommandQueue));
+        CommandQueue.EnqueueCommand(new WaitCommand(player, 1, CommandQueue));
     }
 
     public void ProcessQuizRequest(IPlayer player, QuizType quizType, string sceneName)
     {
-        _commandQueue.EnqueueCommand(new QuizCommand(quizType, sceneName));
-        _commandQueue.EnqueueCommand(new WaitCommand(player, 1, _commandQueue));
+        CommandQueue.EnqueueCommand(new QuizCommand(quizType, sceneName));
+        CommandQueue.EnqueueCommand(new WaitCommand(player, 1, CommandQueue));
     }
 
     public void ProcessQuizFinished()
     {
-        _commandQueue.CommandFinished();
+        CommandQueue.CommandFinished();
     }
 }

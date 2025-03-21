@@ -9,16 +9,14 @@ public class TurnManager : IInitializable, IDisposable
     private BoardManager _boardManager;
 
     private SignalBus _signalBus;
-    private CommandQueue _commandQueue;
     private ITurnCommandProcessor _commandProcessor;
     private int _currentPlayerIndex = 0;
     public IPlayer CurrentPlayer => _playersManager.Players[_currentPlayerIndex];
 
     [Inject]
-    public TurnManager(SignalBus signalBus, CommandQueue commandQueue, ITurnCommandProcessor commandProcessor)
+    public TurnManager(SignalBus signalBus, ITurnCommandProcessor commandProcessor)
     {
         _signalBus = signalBus;
-        _commandQueue = commandQueue;
         _commandProcessor = commandProcessor;
     }
 
@@ -31,13 +29,12 @@ public class TurnManager : IInitializable, IDisposable
         _signalBus.Fire(new TurnStartedSignal(CurrentPlayer));
     }
 
-
     public void Initialize()
     {
         _signalBus.Subscribe<DiceRolledSignal>(OnDiceRolled);
         _signalBus.Subscribe<QuizRequestedSignal>(OnQuizRequested);
         _signalBus.Subscribe<QuizFinishedSignal>(OnQuizFinished);
-        _commandQueue.OnQueueEmpty += OnChangeTurn;
+        _commandProcessor.CommandQueue.OnQueueEmpty += OnChangeTurn;
     }
 
     public void Dispose()
@@ -45,7 +42,7 @@ public class TurnManager : IInitializable, IDisposable
         _signalBus.Unsubscribe<DiceRolledSignal>(OnDiceRolled);
         _signalBus.Unsubscribe<QuizRequestedSignal>(OnQuizRequested);
         _signalBus.Unsubscribe<QuizFinishedSignal>(OnQuizFinished);
-        _commandQueue.OnQueueEmpty -= OnChangeTurn;
+        _commandProcessor.CommandQueue.OnQueueEmpty -= OnChangeTurn;
     }
 
     private void OnDiceRolled(DiceRolledSignal signal)

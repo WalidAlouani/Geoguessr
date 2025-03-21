@@ -1,12 +1,10 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using Zenject;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime;
 
 public enum PlayerState { Idle, Moving }
 
