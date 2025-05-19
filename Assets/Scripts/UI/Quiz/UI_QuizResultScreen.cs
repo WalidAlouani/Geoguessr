@@ -17,6 +17,19 @@ public class UI_QuizResultScreen : MonoBehaviour
 
     public void Initialize(QuizTextManager quizManager, TextQuiz quizData, QuizResult quizResult)
     {
+        ShowResult(quizManager, quizData, quizResult);
+
+        continueButton.onClick.AddListener(() =>
+        {
+            quizManager.OnQuizFinished(quizResult);
+            continueButton.onClick.RemoveAllListeners();
+        });
+
+        StartCoroutine(ShowTapToContinue());
+    }
+
+    private void ShowResult(QuizTextManager quizManager, TextQuiz quizData, QuizResult quizResult)
+    {
         switch (quizResult)
         {
             case QuizResult.Correct:
@@ -34,13 +47,6 @@ public class UI_QuizResultScreen : MonoBehaviour
         }
 
         correctAnswerText.text = quizData.Answers[quizData.CorrectAnswerIndex];
-        continueButton.onClick.AddListener(() =>
-        {
-            quizManager.OnQuizFinished(quizResult);
-            continueButton.onClick.RemoveAllListeners();
-        });
-
-        StartCoroutine(ShowTapToContinue());
     }
 
     private IEnumerator ShowTapToContinue()

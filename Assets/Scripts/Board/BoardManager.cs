@@ -5,8 +5,7 @@ using Zenject;
 
 public class BoardManager : IInitializable, IDisposable
 {
-    private List<TileItem> _tileItems;
-    private int _tilesCount;
+    private Board<TileItem> board;
     private float _multiplier = .5f;
     private List<int> _playerTilePositions = new List<int>();
     private ITileFactory _tileFactory;
@@ -17,11 +16,11 @@ public class BoardManager : IInitializable, IDisposable
     {
         _signalBus = signalBus;
         _tileFactory = tileFactory;
+        board = new Board<TileItem>();
     }
 
     public void Init(List<TileData> tileDatas, Transform parent)
     {
-        _tilesCount = tileDatas.Count;
         CreateBoard(tileDatas, parent);
     }
 
@@ -41,7 +40,6 @@ public class BoardManager : IInitializable, IDisposable
 
     private void CreateBoard(List<TileData> tileDatas, Transform parent)
     {
-        _tileItems = new List<TileItem>();
         for (int i = 0; i < tileDatas.Count; i++)
         {
             var tileData = tileDatas[i];
@@ -49,13 +47,13 @@ public class BoardManager : IInitializable, IDisposable
 
             var tileItem = _tileFactory.CreateTile(tileData, position, parent);
             tileItem.Init(i);
-            _tileItems.Add(tileItem);
+            board.Add(tileItem);
         }
     }
 
     public TileItem GetTile(int tileIndex)
     {
-        return _tileItems[tileIndex % _tilesCount];
+        return board.GetAt(tileIndex % board.Count);
     }
 
     public Vector3 GetTilePosition(int tileIndex)
